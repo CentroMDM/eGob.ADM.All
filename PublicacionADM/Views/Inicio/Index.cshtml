@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "AT| Inicio";
+}
+
+<style>
+    .centerLogoInicio {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+    }
+</style>
+
+<div class="container" ng-controller="crtlHome">
+    <div id="Fondo" class="container">
+        <div class="centerLogoInicio">
+            <div class="form-group">
+                @*{{Angular}}*@
+                <img src="{{ImagenHome}}" alt="Imagen Home" style="max-width:100%;width:auto;height:auto;">
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

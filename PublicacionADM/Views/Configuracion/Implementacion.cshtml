@@ -1,0 +1,435 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-cogs'></i> Configuración de la implementación
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlImplementacion" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+        <div class="panel-container show">
+            <div class="panel-content">
+                <div class="panel-tag">
+                    Datos del propietario
+                </div>
+
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Nombre&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="text" autocomplete="off" ng-model="Implementacion.Nombre" class="form-control" placeholder="Nombre" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Nombre Abreviado</div>
+                            </div>
+                            <input type="text" autocomplete="off" ng-model="Implementacion.NombreAbreviado" class="form-control" placeholder="Abreviatura" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)">
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Lema</div>
+                            </div>
+                            <input type="text" autocomplete="off" ng-model="Implementacion.Lema" class="form-control" placeholder="Lema" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)">
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Logotipo&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="file" accept=".png, .svg" id="selectPhotoLogo" style="display: none;" onchange="angular.element(this).scope().cargaLogo(event)">
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.LogoDirectorioSecundario" class="form-control" placeholder="Logotipo en formato png y/o svg" required>
+                            <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoLogo').click();" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12" ng-show="LogoImplementacionLogo != null && LogoImplementacionLogo != undefined">
+                        <img ng-src="{{LogoImplementacionLogo}}" alt="" style="height:150px;width:150px" />
+                        <br><br>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Favicon&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="file" accept=".png, .svg" id="selectPhotoFavicon" style="display: none;" onchange="angular.element(this).scope().cargaFavicon(event)">
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.FaviconDirectorioSecundario" class="form-control" placeholder="Favicon en formato png y/o svg" required>
+                            <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoFavicon').click();" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12" ng-show="LogoImplementacionFavicon != null && LogoImplementacionFavicon != undefined">
+                        <img ng-src="{{LogoImplementacionFavicon}}" alt="" style="height:150px;width:150px" />
+                        <br><br>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Imagen Home&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="file" accept=".png, .svg" id="selectPhotoHome" style="display: none;" onchange="angular.element(this).scope().cargaImagenHome(event)">
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.ImagenHomeDirectorioSecundario" class="form-control" placeholder="Imagen Home en formato png y/o svg" required>
+                            <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoHome').click();" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12" ng-show="LogoImplementacionImagenHome != null && LogoImplementacionImagenHome != undefined">
+                        <img ng-src="{{LogoImplementacionImagenHome}}" alt="" style="height:150px;width:150px" />
+                        <br><br>
+                    </div>
+                </div>
+
+                <div class="panel-tag">
+                    Circunscripción
+                </div>
+
+                <div class="form-row row align-items-center">
+
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Nivel de Gobierno&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <select class="form-control"
+                                    ng-options="tipoNivelGobierno as tipoNivelGobierno.TipoGobierno for tipoNivelGobierno in Implementacion.NivelesGobierno"
+                                    ng-model="TipoNivelGobierno" ng-change="AsignarNivelGobierno(TipoNivelGobierno);" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-12" ng-show=NivelGobiernoEstatal>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Entidad Federativa</div>
+                            </div>
+                            <select class="form-control"
+                                    ng-options="lstEntidadesFederativas as lstEntidadesFederativas.Estado for lstEntidadesFederativas in EntidadesFederativas"
+                                    ng-model="LSTEntidadesFederativas" ng-change="seleccionEntidadFederativa(LSTEntidadesFederativas);">
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-12" ng-show=NivelGobiernoMunicipal>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Municipio</div>
+                            </div>
+                            <select class="form-control"
+                                    ng-options="lstMunicipios as lstMunicipios.Municipio for lstMunicipios in MunicipiosCircunscripcion"
+                                    ng-model="LSTMunicipios" ng-change="AsignarMunicipioCircunscripcion(LSTMunicipios);">
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel-tag">
+                    Horario
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Inicio de actividades&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="time" min="00:00" max="23:59" autocomplete="off" ng-model="Implementacion.HorarioInicioLaboral" class="form-control" placeholder="Hora de entrada" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Fin de actividades&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="time" autocomplete="off" ng-model="Implementacion.HorarioFinLaboral" class="form-control" placeholder="Hora de salida" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-tag">
+                    Configuración
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Licencia</div>
+                            </div>
+                            <input type="text" id="#Licencia" autocomplete="off" ng-model="Implementacion.GUIDImplementacion" class="form-control" placeholder="Licencia" onkeydown="return /^[A-Z0-9-]/.test(event.key)">
+                        </div>
+                    </div>
+                    <div id="#condicionLicencia" class="col-12 col-lg-8">
+                        <span class="error text-info">
+                            Ingrese la licencia con MAYÚSCULAS, números y guiones.
+                        </span>
+                    </div>
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Fecha de Inicio</div>
+                            </div>
+                            <input type="text" class="input-sm form-control" autocomplete="off" ng-model="Implementacion.FechaInicio" placeholder="Fecha de Inicio" id="datepicker-2" readonly style="cursor:pointer;background-color:transparent;">
+                            <div class="input-group-append">
+                                <span class="input-group-text" style="min-width: 30px; text-align:center">
+                                    <i class="fal fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Fecha de Fin</div>
+                            </div>
+                            <input type="text" class="input-sm form-control" autocomplete="off" ng-model="Implementacion.FechaFin" placeholder="Fecha de Fin" id="datepicker-3" readonly style="cursor:pointer;background-color:transparent;">
+                            <div class="input-group-append">
+                                <span class="input-group-text" style="min-width: 30px; text-align:center">
+                                    <i class="fal fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-tag">
+                    Colores
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="settings-panel">
+                            <div class="expanded theme-colors pl-5 pr-3">
+                                <ul class="m-0">
+                                    <li><a href="#" id="myapp-10" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-10.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Blue Smoke')" title="Blue Smoke" data-original-title="Blue Smoke"></a></li>
+                                    <li><a href="#" id="myapp-7" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-7.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Oslo Gray')" title="Oslo Gray" data-original-title="Oslo Gray"></a></li>
+                                    <li><a href="#" id="myapp-0" data-action="theme-update" data-themesave data-theme="" data-toggle="tooltip" data-placement="top" title="Wisteria (Default)" ng-click="Tema('Wisteria')" data-original-title="Wisteria (base css)"></a></li>
+                                    <li><a href="#" id="myapp-1" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-1.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Tapestry')" title="Tapestry" data-original-title="Tapestry"></a></li>
+                                    <li><a href="#" id="myapp-4" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-4.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Dodger Blue')" title="Dodger Blue" data-original-title="Dodger Blue"></a></li>
+                                    <li><a href="#" id="myapp-13" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-13.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Emerald')" title="Emerald" data-original-title="Emerald"></a></li>
+                                    <li><a href="#" id="myapp-2" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-2.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Atlantis')" title="Atlantis" data-original-title="Atlantis"></a></li>
+                                    <li><a href="#" id="myapp-14" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-14.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Supernova')" title="Supernova" data-original-title="Supernova"></a></li>
+                                    <li><a href="#" id="myapp-9" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-9.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Apricot')" title="Apricot" data-original-title="Apricot"></a></li>
+                                    <li><a href="#" id="myapp-6" data-action="theme-update" data-themesave data-theme="../Assets/css/cust-theme-6.css" data-toggle="tooltip" data-placement="top" ng-click="Tema('Cranberry')" title="Cranberry" data-original-title="Cranberry"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-tag">
+                    Modo
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-2">
+                            <div class="mt-4 d-table w-100 pl-5 pr-3">
+                                <div class="ie-only alert alert-warning d-none">
+                                    <h6>Internet Explorer Issue</h6>
+                                    This particular component may not work as expected in Internet Explorer. Please use with caution.
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 pr-2 text-center">
+                                        <div id="skin-default" data-action="toggle-replace" data-replaceclass="mod-skin-light mod-skin-dark" data-class="" data-toggle="tooltip" data-placement="top" title="" class="d-flex bg-white border border-primary rounded overflow-hidden text-success js-waves-on" data-original-title="Default Mode" ng-click="Modo('Default')" style="height: 80px">
+                                            <div class="bg-primary-600 bg-primary-gradient px-2 pt-0 border-right border-primary"></div>
+                                            <div class="d-flex flex-column flex-1">
+                                                <div class="bg-white border-bottom border-primary py-1"></div>
+                                                <div class="bg-faded flex-1 pt-3 pb-3 px-2">
+                                                    <div class="py-3" style="background: url('../../Assets/img/s-1.png') top left no-repeat;background-size: 100%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        Default
+                                    </div>
+                                    <div class="col-4 px-1 text-center">
+                                        <div id="skin-light" data-action="toggle-replace" data-replaceclass="mod-skin-dark" data-class="mod-skin-light" data-toggle="tooltip" data-placement="top" title="" class="d-flex bg-white border border-secondary rounded overflow-hidden text-success js-waves-on" data-original-title="Light Mode" ng-click="Modo('Claro')" style="height: 80px">
+                                            <div class="bg-white px-2 pt-0 border-right border-"></div>
+                                            <div class="d-flex flex-column flex-1">
+                                                <div class="bg-white border-bottom border- py-1"></div>
+                                                <div class="bg-white flex-1 pt-3 pb-3 px-2">
+                                                    <div class="py-3" style="background:url('../../Assets/img/s-1.png') top left no-repeat;background-size: 100%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        Light
+                                    </div>
+                                    <div class="col-4 px-1 text-center">
+                                        <div id="skin-dark" data-action="toggle-replace" data-replaceclass="mod-skin-light" data-class="mod-skin-dark" data-toggle="tooltip" data-placement="top" title="" class="d-flex bg-white border border-dark rounded overflow-hidden text-success js-waves-on" data-original-title="Dark Mode" ng-click="Modo('Oscuro')" style="height: 80px">
+                                            <div class="bg-fusion-500 px-2 pt-0 border-right"></div>
+                                            <div class="d-flex flex-column flex-1">
+                                                <div class="bg-fusion-600 border-bottom py-1"></div>
+                                                <div class="bg-fusion-300 flex-1 pt-3 pb-3 px-2">
+                                                    <div class="py-3 opacity-30" style="background: url('../../Assets/img/s-1.png') top left no-repeat;background-size: 100%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        Dark
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel-tag">
+                    Sede
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Entidad Federativa&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <select class="form-control"
+                                    ng-options="entFederativa as entFederativa.Estado for entFederativa in EntidadesFederativas"
+                                    ng-model="EntidadFederativa" ng-change="AsignarEntidad(EntidadFederativa);" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Municipio&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <select class="form-control"
+                                    ng-options="municipio as municipio.Municipio for municipio in Municipios"
+                                    ng-model="Municipio" ng-change="AsignarMunicipio(Municipio);" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="sr-only" for="inlineFormInputGroup"></label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Código postal&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <select class="form-control" id="codigoPostalEntidad"
+                                    ng-options="codigoPostal as codigoPostal.CP for codigoPostal in CodigosPostales"
+                                    ng-model="CodigoPostal" ng-change="AsignarCodigoPostal(CodigoPostal)" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Colonia&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <select class="form-control" id="coloniaEntidad"
+                                    ng-options="colonia as colonia.NombreAsentamiento for colonia in Colonias"
+                                    ng-model="Colonia" ng-change="AsignarColonia(Colonia)" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Calle&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="text" id="txtCalle" ng-model="Implementacion.Calle" autocomplete="off" class="form-control" placeholder="Calle" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="sr-only" for="inlineFormInputGroup"></label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Número exterior&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input type="text" id="txtNumeroExterior" ng-model="Implementacion.NumExt" autocomplete="off" class="form-control" placeholder="Número exterior" onkeydown="return /^[a-zA-Z0-9 ]/i.test(event.key)" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label class="sr-only" for="inlineFormInputGroup"></label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Número interior </div>
+                            </div>
+                            <input type="text" id="txtNumeroInterior" ng-model="Implementacion.NumInt" autocomplete="off" class="form-control" placeholder="Número interior" onkeydown="return /^[a-zA-Z0-9 ]/i.test(event.key)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-tag">
+                    URL de Aplicaciones
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" style="min-width: 330px">Buzón de unidades administrativas</div>
+                            </div>
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.Aplicaciones[0].URLAcceso" class="form-control" placeholder="Buzón de unidades administrativas" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" style="min-width: 330px">Sistema de atención de trámites</div>
+                            </div>
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.Aplicaciones[1].URLAcceso" class="form-control" placeholder="Sistema de atención de trámites" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" style="min-width: 330px">Sistema de atención al público</div>
+                            </div>
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.Aplicaciones[2].URLAcceso" class="form-control" placeholder="Sistema de atención al público" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" style="min-width: 330px">Sistema de control de notificación de documentos</div>
+                            </div>
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.Aplicaciones[3].URLAcceso" class="form-control" placeholder="Sistema de control de notificación de documentos" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" style="min-width: 330px">Sistema de seguimiento de auditorías</div>
+                            </div>
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.Aplicaciones[5].URLAcceso" class="form-control" placeholder="Sistema de seguimiento de auditorias" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" style="min-width: 330px">Sistema de seguimiento de asuntos</div>
+                            </div>
+                            <input readonly type="text" autocomplete="off" ng-model="Implementacion.Aplicaciones[6].URLAcceso" class="form-control" placeholder="Sistema de seguimiento de asuntos" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/Configuracion/ImplementacionController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

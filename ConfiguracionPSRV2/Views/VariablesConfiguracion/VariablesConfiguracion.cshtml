@@ -1,0 +1,177 @@
+﻿
+@section links{
+    <link href="~/Assets/css/toastr.css" rel="stylesheet" />
+}
+<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-cogs'></i> Variables de configuración
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlVariables" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Nuevo" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th class="no-sort">Editar</th>
+                                    <th>Título</th>
+                                    <th>Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tabla in tablaView">
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-toggle="tooltip" data-backdrop="static" data-keyboard="false" title="Listar" ng-click="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Título</div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" ng-model="variable.Titulo" placeholder="Título" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Descripción</div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" ng-model="variable.Descripcion" placeholder="Descripción" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Tipo de dato</div>
+                        </div>
+                        <select class="form-control" ng-model="variable.TipoVariable" ng-change="TipoValor(variable.TipoVariable)">
+                            <option value="">--Seleccione una opción--</option>
+                            <option value="1">String</option>
+                            <option value="2">Númerico</option>
+                            <option value="3">Booleano</option>
+                            <option value="4">Lista</option>
+                            <option value="5">Fecha</option>
+                            <option value="6">HTML</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Datos lista</div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" ng-disabled="EsLista" ng-model="variable.datoLista" placeholder="Datos lista" required>
+                        <button type="button" class="btn btn-primary" ng-click="agregarCampo(variable.datoLista)">Agregar</button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="input-group mb-2">
+                        <table class="table table-sm m-0 table-bordered">
+                            <thead class="bg-primary-500">
+                                <tr>
+                                    <th width="25%">Editar</th>
+                                    <th class="text-center">Campo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="campo in listaCampos">
+                                    <td align="center">
+                                        <a href='#' ng-click="EliminarOpcion(campo)" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-times'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td class="text-center">{{campo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Expresión de validación</div>
+                        </div>
+                        <select class="form-control" ng-model="variable.Expresiones" ng-disabled="EsPatron">
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Longitud máxima</div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" ng-disabled="EsMinMax" ng-model="variable.Maxima" placeholder="Longitud máxima" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Longitud mínima</div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" ng-disabled="EsMinMax" ng-model="variable.Minima" placeholder="Longitud mínima" required>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                            <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Guardar</button>
+                            <button type="button" ng-show="btnEliminar" ng-click="EliminarObjetoNegocio()" class="btn btn-primary">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts{
+    <script src="~/Assets/js/Forms/toastr.js"></script>
+    <script src="~/Assets/js/Constantes/ToastrMensajes.js"></script>
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/VariablesConfiguracionController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

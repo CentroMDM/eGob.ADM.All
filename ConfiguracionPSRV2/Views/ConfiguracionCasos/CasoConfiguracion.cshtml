@@ -1,0 +1,978 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-cogs'></i> Configuración de casos
+    </h1>
+</div>
+
+<div ng-app="AppAdministracion" ng-cloak ng-controller="crtlCasoConfiguracion">
+
+    <form name="mdmForm" id="mdmForm" ng-cloak ng-submit="mdmForm.$valid && ValidarAccion()">
+
+        <div id="tablaInicial" style="display:block">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+                <div class="panel-container show">
+                    <div class="panel-content">
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th class="not-export-col" data-orderable="false">Editar</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Estatus</th>
+                                    <th class="not-export-col" data-orderable="false"><i class="fal fa-inbox-out"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="casosConfiguracion in configuracionCasos">
+                                    <td align="center">
+                                        <a ng-show="casosConfiguracion.ClaveStatusCCaso==111"
+                                           href='#' ng-click="ValidarTarea(casosConfiguracion, 'Actualizar')"
+                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'
+                                           title='Editar'
+                                           onclick="this.disabled = true; document.body.style.cursor='wait'; return true;">
+                                            <i class='fal fa-edit'></i>
+                                        </a>
+                                        <a ng-show="casosConfiguracion.ClaveStatusCCaso==110"
+                                           href='#'
+                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1 disabled'
+                                           title='Debes cambiar el estatus primero'>
+                                            <i class='fal fa-edit'></i>
+                                        </a>
+                                    </td>
+                                    <td>{{casosConfiguracion.Nombre}}</td>
+                                    <td>{{casosConfiguracion.Descripcion}}</td>
+                                    <td>{{casosConfiguracion.StatusCCaso}}</td>
+                                    <td align="center">
+                                        <a href='#' ng-show="casosConfiguracion.ClaveStatusCCaso==111"
+                                           ng-click="Publicar(casosConfiguracion)"
+                                           ng-mouseover="Publish=true"
+                                           ng-mouseleave="Publish=false"
+                                           title='Publicar'
+                                           class='btn btn-sm  btn-icon btn-inline-block mr-1'>
+                                            <i ng-show="Publish" class='fal fa-cloud-upload' focusable data-focusable-disabled="true"></i>
+                                            <i ng-hide="Publish" class='fal fa-cloud' focusable data-focusable-disabled="true"></i>
+                                        </a>
+                                        <a href='#' ng-show="casosConfiguracion.ClaveStatusCCaso==110"
+                                           ng-click="Publicar(casosConfiguracion)"
+                                           ng-init="NoPublish=true"
+                                           ng-mouseover="NoPublish=false"
+                                           ng-mouseleave="NoPublish=true"
+                                           title='No Publicar'
+                                           class='w-200 link color-inherit hover-grape6 flex flex-column justify-center items-center'>
+                                            <i ng-show="NoPublish" class="fal fa-cloud-upload" focusable data-focusable-disabled="true"></i>
+                                            <i ng-hide="NoPublish" class='fal fa-cloud-download' focusable data-focusable-disabled="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <!--Form-->
+        <div id="nuevoFormulario" style="display:none">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#" data-backdrop="static" ng-click="RegresarInicial()"><i class="fal fa-align-justify"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+
+
+            <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+                <div class="panel-container show">
+                    <div class="panel-content ng-scope">
+                        <!--Seccion Datos Generales-->
+                        <div class="panel-tag">
+                            Datos generales
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.Nombre" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre Interno&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.NombreInterno" placeholder="Nombre Interno" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre Externo<abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.NombreExterno" placeholder="Nombre Externo" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Descripción&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.Descripcion" placeholder="Descripción" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Descripción Interna&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.DescripcionInterna" placeholder="Descripción Interna" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Descripción Externa&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.DescripcionExterna" placeholder="Descripción Externa" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Abreviatura Interna&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.AbreviaturaInterna" placeholder="Abreviatura Interna" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Abreviatura Externa&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control UPER" ng-model="casoConfiguracion.AbreviaturaExterna" placeholder="Abreviatura Externa" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Plantilla</div>
+                                    </div>
+                                    <input type="file" accept="application/pdf" id="selectPlantilla" ng-model="casoConfiguracion.DirectorioSecundario" style="display: none;" onchange="angular.element(this).scope().CargarPlantilla(event)">
+                                    <input readonly type="text" autocomplete="off" ng-model="casoConfiguracion.DirectorioSecundario" class="form-control" placeholder="Seleccione su Plantilla en formato pdf">
+                                    <input type="button" value="Buscar" onclick="document.getElementById('selectPlantilla').click();" />
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Prioridad&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-click="getPrioridad()"
+                                            ng-options="itmPrioridad as itmPrioridad.NombreItem for itmPrioridad in lstPrioridad"
+                                            ng-model="SlctPrioridad" ng-change="setPrioridad(SlctPrioridad)" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br />
+                        <!--Seccion Configuracion-->
+                        <div class="panel-tag">
+                            Configuración
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Tipo de servicio&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="catTipoServicio as catTipoServicio.NombreServicio for catTipoServicio in catTipoServicios"
+                                            ng-model="tipoServicio" ng-change="setTipoServicio(tipoServicio)" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Tipo de caso&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="tipoCaso as tipoCaso.NombreItem for tipoCaso in tipoCasos"
+                                            ng-model="tipoCaso" ng-change="setTipoCaso(tipoCaso)" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Clasificador de caso&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="Clasificacion as Clasificacion.NombreItem for Clasificacion in ClasificacionCaso"
+                                            ng-model="Clasificacion" ng-change="setClasificacionCaso(Clasificacion)" >
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Flujo de trabajo&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="definicionWorkFlow as definicionWorkFlow.Nombre for definicionWorkFlow in definicionesWorkFlow"
+                                            ng-model="definicionWorkFlow" ng-change="setDefinicion(definicionWorkFlow)" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Tipo resultado</div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="tipoResultado as tipoResultado.NombreItem for tipoResultado in tipoResultados"
+                                            ng-model="tipoResultado" ng-change="setTipoResultados(tipoResultado)">
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Tipo de formato</div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="formato as formato.NombreExterno for formato in formatos"
+                                            ng-model="tipoFormato" ng-change="setTipoFormato(tipoFormato)">
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                    <button ng-hide="btnDisabled" id="btnADDFORMATO" type="button" ng-click="AddFormato(tipoFormato)" class="btn btn-primary">Aceptar formato</button>
+                                </div>
+                                <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaSecundaria">
+                                    <thead>
+                                        <tr>
+                                            <th>Eliminar</th>
+                                            <th>Formato</th>
+                                            <th>Descripción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="listaFormato in listaFormatos">
+                                        <tr>
+                                            <td align="center">
+                                                <a href='#' ng-click="EliminarFormato(listaFormato)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                            </td>
+                                            <td>{{listaFormato.NombreExterno}}</td>
+                                            <td>{{listaFormato.DescripcionExterna}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <br />
+                        <!--Seccion Dias-->
+                        <div class="panel-tag" id="Atencion">
+                            Tiempos de Atención y Respuesta en Días
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Término de atención&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="number" autocomplete="off" class="form-control" ng-model="casoConfiguracion.DiasHabilesTerminoAtencion" min="0" value="0" placeholder="días " required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Tiempo Respuesta&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                    </div>
+                                    <input type="number" autocomplete="off" class="form-control" ng-model="casoConfiguracion.DiasHabilesRespuesta" min="0" value="0" placeholder="días" required>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <!--Seccion Permisos-->
+                        <div class="panel-tag">
+                            Permisos
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch2"
+                                               ng-model="casoConfiguracion.PermitirRespuesta"
+                                               ng-checked="casoConfiguracion.PermitirRespuesta" />
+                                        <label class="custom-control-label" for="customSwitch2">Permitir respuesta</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch3"
+                                               ng-model="casoConfiguracion.RequiereAcuse"
+                                               ng-checked="casoConfiguracion.RequiereAcuse"
+                                               ng-click="AddAcuse()" />
+                                        <label class="custom-control-label" for="customSwitch3">Requiere acuse</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch4"
+                                               ng-model="casoConfiguracion.RequiereFiel"
+                                               ng-checked="casoConfiguracion.RequiereFiel" />
+                                        <label class="custom-control-label" for="customSwitch4">Requiere e.firma</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch5"
+                                               ng-model="casoConfiguracion.RequiereAutorizacion"
+                                               ng-checked="casoConfiguracion.RequiereAutorizacion" />
+                                        <label class="custom-control-label" for="customSwitch5">Requiere autorización</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Permiso acuse-->
+                        <div class="col-12 col-lg-12" id="reqselec">
+                            <div class="input-group mb-2">
+                                <div ng-class="input-group-prepend">
+                                    <div ng-show="Requiere" class="input-group-text">Plantilla de Acuse</div>
+                                </div>
+                                <input ng-show="Requiere" type="file" accept="application/pdf" id="selectAcuse" ng-model="casoConfiguracion.AcuseModelo" style="display: none;" onchange="angular.element(this).scope().CargarAcuse(event)">
+                                <input readonly ng-show="Requiere" type="text" autocomplete="off" ng-model="casoConfiguracion.DirectorioSecundarioAcuse" class="form-control" placeholder="Agrega plantilla para tu Acuse en formato pdf">
+                                <input ng-show="Requiere" type="button" value="Buscar" onclick="document.getElementById('selectAcuse').click();" />
+                            </div>
+                        </div>
+                        <!--Seccion Cuerpo documento -->
+                        <div class="panel-tag">
+                            Cuerpo del documento
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                @*<div class="input-group-prepend">*@
+                                @*<textarea class="form-control" id="tinymce" rows="5"></textarea>*@
+                                <div id="summernote" rows="3">
+                                </div>
+                            </div>
+                        </div>
+                        <!--Seccion Variables -->
+                        <!--<div class="panel-tag">
+                            Variables de caso
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="form-group">
+                                <div class="frame-wrap">
+                                    <button type="button" ng-disabled="btnAddVariables" class="btn btn-primary" data-toggle="modal" ng-click="NuevoProcesoVariable()" data-backdrop="static" data-keyboard="false" data-target="#frmVariables">
+                                        Añadir variables
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Eliminar</th>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="tblVariable in TCasoFormatoVariables">
+                                            <td align="center">-->
+                                                @*<a href='#' ng-click="ValidarTareaVariable(tblVariable, 'Actualizar')" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#frmVariables" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>*@
+                                                <!--<a href='#' ng-click="EliminarVariableVw(tblVariable)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>-->
+                                                @*<a ng-show="btnActualizar" href='#' ng-click="" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>*@
+                                            <!--</td>
+                                            <td>{{tblVariable.Title}}</td>
+                                            <td>{{tblVariable.NombreInterno}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>-->
+                        <!--Seccion Respuestas -->
+                        <div class="panel-tag">
+                            Respuestas
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Respuestas</div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="configuracionCaso as configuracionCaso.Nombre for configuracionCaso in configuracionCasos"
+                                            ng-model="configuracionCaso" ng-change="setConfiguracionCasos(configuracionCaso)">
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                    <div class="form-group">
+                                        <div class="frame-wrap">
+                                            <button type="button" ng-click="addRespuestaCaso(configuracionCaso)" class="btn btn-primary">Agregar Respuesta</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Editar</th>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="respuestaCaso in respuestasCasos">
+                                            <td align="center">
+                                                <a href='#' ng-click="EliminarRespuesta(respuestaCaso)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                            </td>
+                                            <td>{{respuestaCaso.Nombre}}</td>
+                                            <td>{{respuestaCaso.Descripcion}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--Documentos Anexos-->
+                        <div class="panel-tag">
+                            Documentos Adjuntos Requeridos
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="form-group">
+                                <div class="frame-wrap">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="ModalDocumentos()" data-backdrop="static" data-keyboard="false"
+                                            data-target="#frmConfDocumentos">
+                                        Añadir Requisito
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <!--TDocuemtos anexos-->
+                                <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Eliminar</th>
+                                            <th>Orden</th>
+                                            <th>Nombre de Documento</th>
+                                            <th>Requerido</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--anexos-->
+                                        <tr ng-repeat="tabla in tblAnexos">
+                                            <td align="center">
+                                                <a href='#' ng-click="dropRequisito(tabla)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                            </td>
+                                            <td align="center">{{tabla.Orden}}</td>
+                                            <td align="center">{{tabla.NombreDocumento}}</td>
+                                            <td align="center" ng-show="{{tabla.Requerido}}">Requerido</td>
+                                            <td align="center" ng-hide="{{tabla.Requerido}}">Opcional</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--Caso-Agrupadores -->
+                        <div class="panel-tag">
+                            Clasificadores
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="form-group">
+                                <div class="frame-wrap">
+                                    <button type="button" ng-disabled="btnAddAgrupadores" class="btn btn-primary" data-toggle="modal" ng-click="NuevoAgrupadorCaso()" data-backdrop="static" data-keyboard="false" data-target="#frmAgrupadores">Añadir Clasificador</button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <!--tagrupadores-->
+                                <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Eliminar</th>
+                                            <th>Agrupador</th>
+                                            <th>Clasificador</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--grupoClas-->
+                                        <tr ng-repeat="tabla in grupoClas">
+                                            <td align="center">
+                                                <a href='#' ng-show="btnInsertar" ng-click="EliminarCasosAgrupadorClasificadorModal(tabla,casoConfiguracion)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                                <a href='#' ng-show="btnNuevo" ng-click="DropListaAgrupadorClasificadorNuevo(tabla)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                            </td>
+                                            <td align="center">{{tabla.NombreGrupo}}</td>
+                                            <td align="center">{{tabla.NombreClasificador}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--Caso-Unidades Administrativas -->
+                        <div class="panel-tag">
+                            Permisos de visualización de Caso a Unidades Administrativas
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="form-group">
+                                <div class="frame-wrap">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="ModalCasoUnidad()" data-backdrop="static" data-keyboard="false" data-target="#frmCasoUnidad">
+                                        Añadir Permiso
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <!--tabla de UA-->
+                                <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Eliminar</th>
+                                            <th>Unidad Administrativa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--CasoUnidad-->
+                                        <tr ng-repeat="tabla in CasoUnidad">
+                                            <td align="center">
+                                                <a href='#' ng-click="DropCasoUnidad(tabla,btnInsertar)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                            </td>
+                                            <td align="center">{{tabla.NombreUA}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <div class="panel-tag">
+                            Inicia Autoridad
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input"
+                                               id="IniciaAutoridad"
+                                               ng-click="Autoridad()"
+                                               ng-model="casoConfiguracion.IniciaAutoridad"
+                                               ng-checked="casoConfiguracion.IniciaAutoridad" />
+                                        <label class="custom-control-label" for="IniciaAutoridad">Inicia Autoridad</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Firmante-->
+                        <div class="col-12 col-lg-12" ng-show="casoConfiguracion.IniciaAutoridad">
+                            <div class="panel-tag">
+                                Firmantes Autorizados
+                            </div>
+                            <div class="form-row row align-items-center">
+                                <div class="col-12 col-lg-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text ">Firmantes</div>
+                                        </div>
+                                        <select class="form-control"
+                                                ng-click="GetFirmantes()"
+                                                ng-options="FirmanteSeleccionado.NombreFirmante for FirmanteSeleccionado in lstFirmantes"
+                                                ng-model="FirmanteSeleccionado"
+                                                ng-change="SetFirmantes(FirmanteSeleccionado)">
+                                            <option value="">--Seleccione una opción--</option>
+                                        </select>
+                                        <div class="form-group">
+                                            <div class="frame-wrap">
+                                                <button type="button" ng-click="addFirmante(FirmanteSeleccionado)" class="btn btn-primary">Agregar Firmante</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-12 col-lg-12">
+                                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Eliminar</th>
+                                                <th>RFC</th>
+                                                <th>Firmante</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="Firma in vwFirmantes">
+                                                <td align="center">
+                                                    <a href='#' ng-click="dropFirmante(Firma)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                                </td>
+                                                <td>{{Firma.RFCEmpleado}}</td>
+                                                <td>{{Firma.NombreFirmante}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!--Botones de guardado del formulario-->
+                        <div class="form-row row align-items-center">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <br />
+                                    <div class="frame-wrap">
+                                        <button ng-show="btnGuardar"
+                                                data-target="#default-example-modal-lg"
+                                                class="btn btn-primary">
+                                            Guardar
+                                        </button>
+                                        <button type="submit" ng-show="btnActualizar"
+                                                class="btn btn-primary">
+                                            Guardar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>
+
+
+
+
+
+
+    <!--Modal configuracion Agrupadores-->
+    <form name="mdmFormCasoAgrupador">
+        <div class="modal hide fade" id="frmAgrupadores" style="z-index: 6100;">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-primary-500">
+                        <h5 class="modal-title">Clasificadores</h5>
+                    </div>
+                    <div class="modal-body" style="height:340px">
+                        <div class="panel-tag">
+                            Agregar
+                        </div>
+                        <div class="panel-content">
+                            <div class="form-row row align-items-center mb-2">
+                                <div class="col-12 col-lg-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text  ">Agrupador</div>
+                                        </div>
+                                        <div id="s2-container-good">
+                                            <select data-placeholder="Seleccionar Grupo" class="select2 form-control" id="lstAgrupadorFiltro"
+                                                    ng-options="tablaAgrupadorFiltro as tablaAgrupadorFiltro.nombreAgrupador for tablaAgrupadorFiltro in TablaAgrupadores"
+                                                    ng-model="lstSeleccionAgrupadorFiltro"
+                                                    ng-change="asignaAgrupadorFiltro(lstSeleccionAgrupadorFiltro);" required>
+                                                <option value="">--Seleccione una opción--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text  ">Clasificador</div>
+                                        </div>
+                                        <div id="s2-container-good">
+                                            <select data-placeholder="Seleccionar Clasificación" class="select2 form-control" id="lstClasificacionFiltro"
+                                                    ng-options="tablaClasificadoresFiltro as tablaClasificadoresFiltro.nombreClasificador for tablaClasificadoresFiltro in TablaClasificadoresFiltro"
+                                                    ng-model="lstSeleccionClasificadorFiltro"
+                                                    ng-click="consultaObjetosClasificados(lstSeleccionClasificadorFiltro);" required>
+                                                <option value="">--Seleccione una opción--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Botones CasoAgrupador-->
+                        <div class="modal-footer">
+                            <div class="col-lg-12">
+                                <div class="frame-wrap">
+                                    <button type="button" ng-show="btnInsertar" ng-click="InsertarCasosAgrupadorClasificadorModal(casoConfiguracion) " class="btn btn-primary">Aceptar</button>
+                                    <button type="button" ng-show="btnNuevo" ng-click="InsertarListaAgrupadorClasificadorNuevo()" class="btn btn-primary">Aceptar</button>
+                                    <button type="button" class="btn btn-primary" ng-click="CancelarAgrupadorCaso()">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!--Modal Caso Unidades Adm-->
+    <form name="mdmFormCasoUnidad">
+        <div class="modal hide fade" id="frmCasoUnidad" style="z-index: 6100;">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-primary-500">
+                        <h5 class="modal-title">Unidades Administrativas</h5>
+                    </div>
+                    <div class="modal-body" style="height:340px">
+                        <div class="panel-tag">
+                            Agregar
+                        </div>
+
+                        <div class="panel-content">
+                            <div class="form-row row align-items-center mb-2">
+                                <div class="col-12 col-lg-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text ">Unidades Administrativas</div>
+                                        </div>
+                                        <div id="s2-container-good">
+                                            @*<input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" aria-controls="select2-nvs5-results" aria-activedescendant="select2-nvs5-result-k2qd-number:214">*@
+                                            <select data-placeholder="Seleccionar Unidad Administrativa" class="form-control status" id="lstUA"
+                                                    ng-options="lstUnidadesAdm.NombreUA for lstUnidadesAdm in LstUnidadesAdm"
+                                                    ng-model="lstUnidadesAdm"
+                                                    ng-change="changUAseleccion(lstUnidadesAdm)"
+                                                    required>
+                                                <option value="">--Seleccione una opción--</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Botones CasoUnidad-->
+                        <div class="modal-footer">
+                            <div class="col-lg-12">
+                                <div class="frame-wrap">
+                                    <button type="button" ng-click="AceptarCasoUnidad(lstUnidadesAdm)" class="btn btn-primary">Aceptar</button>
+                                    <button type="button" class="btn btn-primary" ng-click="CancelarCasoUnidad()">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @* Modal Variables *@
+    @*<form name="mdmFormVariable" ng-cloak ng-submit="mdmFormVariable.$valid && ValidarAccionVariable()">
+        <div class="modal hide fade" id="frmVariables" style="z-index: 6100;">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-primary-500">
+                        <h5 class="modal-title">Variables</h5>
+                    </div>
+                    <div class="modal-body" style="height:340px">
+                        <div class="panel-tag">
+                            Variable
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Nombre de la variable</div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="tblVariable as tblVariable.NombreInterno for tblVariable in variables"
+                                            ng-model="variable" ng-change="setVariables(variable)" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-8">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Orden</div>
+                                    </div>
+                                    <input type="number" min="10" max="50" step="10" autocomplete="off" class="form-control" ng-model="variableSeccion.Orden" placeholder="Orden *" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1Etapa" ng-model="variableSeccion.Required" ng-checked="variableSeccion.Required == 1" parse-int ng-true-value="1" ng-false-value="0" />
+                                        <label class="custom-control-label" for="customSwitch1Etapa">Obligatorio</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Contenido</div>
+                                    </div>
+                                    <textarea class="form-control" ng-model="variableSeccion.ContenidoDefault" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-lg-12">
+                            <div class="frame-wrap">
+                                <button type="submit" ng-show="btnGuardarVariable" class="btn btn-primary">Aceptar</button>
+                                <button type="submit" ng-show="btnActualizarVariable" class="btn btn-primary">Aceptar</button>
+                                <button type="button" class="btn btn-primary" ng-click="CancelarVariables()">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>*@
+
+
+
+    <!--Modal Caso Documentos-->
+    <form name="mdmFormConfDocumentos">
+        <div class="modal hide fade" id="frmConfDocumentos" style="z-index: 6100;">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-primary-500">
+                        <h5 class="modal-title">Documentos Adjuntos Requeridos</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel-tag">
+                            Requisito
+                        </div>
+                        <div class="panel-content">
+                            <div class="form-row row align-items-center mb-2">
+                                <div class="col-12 col-lg-12">
+                                    <div class="form-row row align-items-center">
+                                        <div class="col-12 col-lg-6 ">
+                                            <div class="input-group mb-2">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           id="Obligatorio"
+                                                           ng-model="configuracionDocumento.Requerido"
+                                                           ng-checked="configuracionDocumento.Requerido==true" />
+                                                    <label class="custom-control-label" for="Obligatorio">Requerido</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-lg-6">
+                                            <div class="input-group mb-2">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           id="Mostrar"
+                                                           ng-model="configuracionDocumento.Mostrar"
+                                                           ng-checked="configuracionDocumento.Mostrar==true" />
+                                                    <label class="custom-control-label" for="Mostrar">Mostrar</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text ">Orden *</div>
+                                        </div>
+
+                                        <input type="number" pattern="\d+" autocomplete="off" class="form-control align-self-md-center" ng-model="configuracionDocumento.Orden" placeholder="Número de ordenamiento 1-50" min="1" max="50" step="1" required>
+
+                                    </div>
+
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text ">Tipo de Archivo *</div>
+                                        </div>
+                                        <select data-placeholder="Tipo de Archivo" class="form-control" id="listTipoArchivo"
+                                                ng-click="GetTipoArchivo()"
+                                                ng-options="lstTipoArchivo.NombreDocumento for lstTipoArchivo in lstTipoArchivo"
+                                                ng-model="tipoDocumento.TipoArchivo"
+                                                ng-change="changeTipoArchivo(tipoDocumento.TipoArchivo)"
+                                                required>
+                                            <option value="">--Seleccione una opción--</option>
+                                        </select>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--Botones Documentos-->
+                        <div class="modal-footer">
+                            <div class="col-lg-12">
+                                <div class="frame-wrap">
+                                    <button type="button" ng-click="AddTipoDocumento(tipoDocumento.TipoArchivo)" class="btn btn-primary">Aceptar</button>
+                                    <button type="button" class="btn btn-primary" ng-click="CancelarDocumentos()">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+
+</div>
+@section scripts
+{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/ConfiguracionCasosController/CasoConfiguracionController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

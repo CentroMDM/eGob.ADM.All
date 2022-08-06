@@ -1,0 +1,786 @@
+﻿<!DOCTYPE html>
+<!--
+Template Name:  SmartAdmin Responsive WebApp - Template build with Twitter Bootstrap 4
+Version: 4.5.1
+Author: Sunnyat A.
+Website: http://gootbootstrap.com
+Purchase: https://wrapbootstrap.com/theme/smartadmin-responsive-webapp-WB0573SK0?ref=myorange
+License: You must have a valid license purchased only from wrapbootstrap.com (link above) in order to legally use this theme for your project.
+-->
+<html lang="es" ng-app="AppAdministracion">
+<head>
+    <meta charset="utf-8">
+    <title>ADM :: Gobierno Digital</title>
+    <meta name="description" content="Gobierno Digital">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+    <!-- Call App Mode on ios devices -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- base css -->
+
+
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="~/Assets/css/vendors.bundle.css">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="~/Assets/css/app.bundle.css">
+    <link id="mytheme" rel="stylesheet" media="screen, print" href="#" />
+    <link id="myskin" rel="stylesheet" media="screen, print" href="~/Assets/css/skin-master.css">
+
+
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Assets/img/G.D_Logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Assets/img/G.D_Logo.png">
+    <link rel="mask-icon" href="~/Assets/img/safari-pinned-tab.svg" color="#5bbad5">
+
+
+    <link rel="stylesheet" media="screen, print" href="~/Assets/css/select2.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="~/Assets/css/datatables.bundle.css" />
+    <link rel="stylesheet" media="screen, print" href="~/Assets/css/sweetalert2.bundle.css" />
+
+
+    <link href="~/Assets/css/jquery.orgchart.css" rel="stylesheet" />
+    <link href="~/Assets/css/jquery.loadingModal.min.css" rel="stylesheet" />
+    <link href="~/Assets/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Assets/libs/summernote-0.8.18-dist/summernote.min.css" rel="stylesheet" />
+
+
+
+    <!-- NOTAS | RECOMENDACIONES  -->
+    <!--
+        Mover organizar todo el codigo css en archivos separados y realizar la importacion necesaria, si es necesario, segmentar el css segun el tipo y/o uso
+    -->
+
+
+
+    <style>
+        .vertical-alignment-helper {
+            display: table;
+            height: 100%;
+            width: 100%;
+            pointer-events: none; /* This makes sure that we can still click outside of the modal to close it */
+        }
+
+        .vertical-align-center {
+            /* To center vertically */
+            display: table-cell;
+            vertical-align: middle;
+            pointer-events: none;
+        }
+
+        .modal-content {
+            /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+            width: inherit;
+            max-width: inherit; /* For Bootstrap 4 - to avoid the modal window stretching full width */
+            height: inherit;
+            /* To center horizontally */
+            margin: 0 auto;
+            pointer-events: all;
+        }
+
+        .igt-icon {
+            min-width: 30px;
+            text-align: center
+        }
+
+        .sticky-top {
+            position: sticky;
+            top: 0;
+            z-index: 2020;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
+    <style type="text/css">
+        .form-control.Cap {
+            text-transform: capitalize;
+        }
+
+        .form-control.UPER {
+            text-transform: uppercase;
+        }
+
+        .form-control.lower {
+            text-transform: lowercase;
+        }
+    </style>
+
+
+
+    <!-- NOTAS | RECOMENDACIONES  -->
+    <!--
+        Validar si son requeridos, al parecer no por que todas las importaciones de scripts y kink se hacen en el head
+    -->
+    @RenderSection("links", required: false)
+
+    <style>
+        .input-group-text {
+            min-width: 185px;
+            text-align: left;
+        }
+
+        th.dt-center {
+            text-align: center;
+        }
+
+        .modal-open .select2-dropdown {
+            z-index: 10060;
+        }
+
+        .modal-open .select2-close-mask {
+            z-index: 10055;
+        }
+
+        .swal-overlay {
+            z-index: 100000000000 !important;
+        }
+
+        .swal-modal {
+            z-index: 99999;
+        }
+
+        .swal2-container {
+            z-index: 10000;
+        }
+
+        .swal-container {
+            z-index: 99999;
+        }
+
+        .modal-dialog {
+            overflow-y: initial !important;
+        }
+
+        .modal-body {
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        /*.panel-tag {
+            margin-bottom: 15px;
+            margin-top: 20px
+        }*/
+        /*.panel-tag {
+            padding: 1rem 1rem;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--theme-primary);
+            background: var(--theme-primary-50);
+            font-weight: 400;
+            font-size: 0.875rem;
+            border-radius: 0px 8px 8px 0px;
+            color: var(--theme-fusion-800);
+        }*/
+
+        .panel-tag {
+            padding: 1rem 1rem;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--theme-primary);
+            background: rgba(var(--theme-rgb-primary),.1);
+            opacity: 0.8;
+            font-weight: 400;
+            font-size: 0.875rem;
+            border-radius: 0px 8px 8px 0px;
+        }
+
+        .mod-skin-dark:not(.mod-skin-light) .panel-tag {
+            background: rgba(29, 201, 183, 0.15);
+            background: rgba(var(--theme-rgb-primary), 0.15);
+            color: #ffffff;
+        }
+
+        .swal2-icon.swal2-question {
+            border-color: var(--theme-primary-200);
+            color: var(--theme-primary-600);
+        }
+
+        /*.mod-skin-dark:not(.mod-skin-light) .panel-tag {
+            background: rgba(29, 201, 183, 0.15);
+            padding: 1rem 1rem;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            border-left: 3px solid var(--theme-primary);*/
+        /*background: var(--theme-primary-50);*/
+        /*background: rgba(var(--theme-rgb-success), 0.15);
+            font-weight: 400;
+            font-size: 0.875rem;
+            border-radius: 0px 8px 8px 0px;
+            color: var(--theme-light);
+        }*/
+
+        /*.mod-skin-light .panel-tag {
+            background: rgba(29, 201, 183, 0.15);
+            padding: 1rem 1rem;
+            margin-bottom: 2rem;
+            color: var(--theme-dark);
+            border-left: 3px solid var(--theme-primary);
+            background: var(--theme-primary-50);
+            font-weight: 400;
+            font-size: 0.875rem;
+            border-radius: 0px 8px 8px 0px;
+            color: var(--theme-fusion-800);
+        }*/
+
+        .s2-container-good {
+            flex: 1;
+        }
+
+        #s2-container-width {
+            width: 100%;
+        }
+
+        .abs-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .form {
+            width: 450px;
+        }
+
+        .header-btn[data-class='mobile-nav-on'] {
+            border-color: var(--theme-primary-500);
+            background-color: var(--theme-primary-900);
+            background-image: -webkit-gradient(linear, left bottom, left top, from(var(--theme-primary-500)), to(var(--theme-primary-900)));
+            background-image: linear-gradient(to top, var(--theme-primary-500), var(--theme-primary-900));
+            color: #fff;
+            width: 3.875rem;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: var(--theme-primary-500);
+            border-color: var(--theme-primary-500);
+            -webkit-box-shadow: 0 2px 6px 0 rgba(var(--theme-rgb-primary), 0.5);
+            box-shadow: 0 2px 6px 0 rgba(var(--theme-rgb-primary), 0.5);
+        }
+
+            .btn-info:hover {
+                color: #fff;
+                background-color: var(--theme-primary-900);
+                border-color: var(--theme-primary-900);
+            }
+
+        .swal2-styled.swal2-confirm {
+            border: 0;
+            border-radius: 0.25em;
+            background: initial;
+            background-color: var(--theme-primary-600);
+            color: #fff;
+            font-size: 0.875em;
+        }
+
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+
+</head>
+@*<body class="mod-bg-1 mod-nav-link">
+  <body class="mod-bg-1 mod-nav-link nav-function-fixed header-function-fixed" ng-controller="crtlHome"ng-cloak>
+*@
+<body @*class="mod-bg-1 mod-nav-link"*@
+      class="mod-bg-1 mod-nav-link footer-function-fixed pace-done"
+      ng-controller="crtlHome" ng-cloak>
+
+    <!-- Cargador -->
+    <div class="preloader">
+        <button class="col btn btn-primary waves-effect waves-themed" type="button" disabled="">
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            Espere por favor..
+        </button>
+    </div>
+
+
+    <!-- #END# Cargador -->
+    @*----------Servicios Web----------*@
+    @*<script async="" src="https://cdn.serviciosweb.mx:84/ConfiguracionInicial.js"></script>*@
+    @*----------QA----------*@
+    @*<script async="" src="https://cdn.edomex.qa-psr-mx.com/ConfiguracionInicial.js"></script>*@
+    @*----------Produccion Demo----------*@
+    <script async="" src="https://cdn.e-gob.app/Demo-3af0/ConfiguracionInicial.js"></script>
+    @*----------Produccion----------*@
+    @*<script async="" src="https://cdn.e-gob.app/ConfiguracionInicial.js"></script>*@
+    @*----------SLPM----------*@
+    @*<script src="https://global.d-gob.app/cdn/ConfiguracionInicial.js"></script>*@
+
+
+
+
+
+    <!-- BEGIN Page Wrapper -->
+    <div class="page-wrapper">
+        <div class="page-inner">
+            <!-- BEGIN Left Aside -->
+            <aside class="page-sidebar">
+                <div class="page-logo">
+                    <a href="~/Home/Index" class="page-logo-link press-scale-down d-flex align-items-center position-relative">
+                        <img src="{{LogoApp}}" alt="GD-Digital" aria-roledescription="logo">
+                        <span class="page-logo-text mr-1">Administración</span>
+                        <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
+
+                    </a>
+                </div>
+
+                <!-- BEGIN PRIMARY NAVIGATION -->
+                @{ Html.RenderPartial("_MenuIzquierda"); }
+                <!-- END PRIMARY NAVIGATION -->
+                <!-- NAV FOOTER -->
+                <!-- END NAV FOOTER -->
+            </aside>
+            <!-- END Left Aside -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN Page Header -->
+                @{ Html.RenderPartial("_Encabezado"); }
+                <!-- END Page Header -->
+                <!-- BEGIN Page Content -->
+                <!-- the #js-page-content id is needed for some plugins to initialize -->
+                <main id="js-page-content" role="main" class="page-content ">
+                    @*<div class="panel-content mb-3 sticky-top">*@
+                    <div class="panel-content mb-3">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item">
+                                <a href="~/Home/Index">
+                                    <i class="fal fa-home mr-1 fs-md"></i><font style="vertical-align: inherit;">
+                                        <font style="vertical-align: inherit;">
+                                            Inicio
+                                        </font>
+                                    </font>
+                                </a>
+                            </li>
+                        </ol>
+                    </div>
+                    @RenderBody()
+                </main>
+                <!-- this overlay is activated only when mobile menu is triggered -->
+                <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
+                <!-- END Page Content -->
+                <!-- BEGIN Page Footer -->
+                @{Html.RenderPartial("_Footer"); }
+                <!-- END Page Footer -->
+                <!-- BEGIN Shortcuts -->
+                <!-- END Shortcuts -->
+                <!-- BEGIN Color profile -->
+                <p id="js-color-profile" class="d-none">
+                    <span class="color-primary-50"></span>
+                    <span class="color-primary-100"></span>
+                    <span class="color-primary-200"></span>
+                    <span class="color-primary-300"></span>
+                    <span class="color-primary-400"></span>
+                    <span class="color-primary-500"></span>
+                    <span class="color-primary-600"></span>
+                    <span class="color-primary-700"></span>
+                    <span class="color-primary-800"></span>
+                    <span class="color-primary-900"></span>
+                    <span class="color-info-50"></span>
+                    <span class="color-info-100"></span>
+                    <span class="color-info-200"></span>
+                    <span class="color-info-300"></span>
+                    <span class="color-info-400"></span>
+                    <span class="color-info-500"></span>
+                    <span class="color-info-600"></span>
+                    <span class="color-info-700"></span>
+                    <span class="color-info-800"></span>
+                    <span class="color-info-900"></span>
+                    <span class="color-danger-50"></span>
+                    <span class="color-danger-100"></span>
+                    <span class="color-danger-200"></span>
+                    <span class="color-danger-300"></span>
+                    <span class="color-danger-400"></span>
+                    <span class="color-danger-500"></span>
+                    <span class="color-danger-600"></span>
+                    <span class="color-danger-700"></span>
+                    <span class="color-danger-800"></span>
+                    <span class="color-danger-900"></span>
+                    <span class="color-warning-50"></span>
+                    <span class="color-warning-100"></span>
+                    <span class="color-warning-200"></span>
+                    <span class="color-warning-300"></span>
+                    <span class="color-warning-400"></span>
+                    <span class="color-warning-500"></span>
+                    <span class="color-warning-600"></span>
+                    <span class="color-warning-700"></span>
+                    <span class="color-warning-800"></span>
+                    <span class="color-warning-900"></span>
+                    <span class="color-success-50"></span>
+                    <span class="color-success-100"></span>
+                    <span class="color-success-200"></span>
+                    <span class="color-success-300"></span>
+                    <span class="color-success-400"></span>
+                    <span class="color-success-500"></span>
+                    <span class="color-success-600"></span>
+                    <span class="color-success-700"></span>
+                    <span class="color-success-800"></span>
+                    <span class="color-success-900"></span>
+                    <span class="color-fusion-50"></span>
+                    <span class="color-fusion-100"></span>
+                    <span class="color-fusion-200"></span>
+                    <span class="color-fusion-300"></span>
+                    <span class="color-fusion-400"></span>
+                    <span class="color-fusion-500"></span>
+                    <span class="color-fusion-600"></span>
+                    <span class="color-fusion-700"></span>
+                    <span class="color-fusion-800"></span>
+                    <span class="color-fusion-900"></span>
+                </p>
+                <!-- END Color profile -->
+            </div>
+        </div>
+    </div>
+    <!-- END Page Wrapper -->
+    @*<script src="~/Assets/js/Init/PSR-Init.js"></script>*@
+    <script src="~/Assets/js/Init/vendors.bundle.js"></script>
+    <script src="~/Assets/js/Init/app.bundle.js"></script>
+
+    <script src="~/Assets/js/Angular/angular.min.js"></script>
+    <script src="~/Assets/js/Angular/angular-touch.min.js"></script>
+    <script src="~/Assets/js/Angular/angular-sanitize.min.js"></script>
+    <script src="~/Assets/js/Angular/angular-route.min.js"></script>
+    <script src="~/Assets/js/Angular/angular-animate.min.js"></script>
+
+
+
+    <script src="~/Assets/js/Constantes/ConstantesGeneral.js"></script>
+    <script src="~/Assets/js/Constantes/AdministracionConstantes.js"></script>
+
+    <script src="~/Assets/js/Forms/datatables.bundle.js"></script>
+    <script src="~/Assets/js/Forms/datatables.export.js"></script>
+
+    <script src="~/Assets/js/Forms/select2.bundle.js"></script>
+
+    <script src="~/Assets/js/Forms/sweetalert2.bundle.js"></script>
+
+    <script src="~/Assets/js/Forms/jquery.loadingModal.min.js"></script>
+    <script src="~/Assets/js/Forms/bootstrap-datepicker.js"></script>
+
+
+    <script src="~/Assets/js/Libs/toastr.js"></script>
+    <script src="~/Assets/libs/summernote-0.8.18-dist/summernote.min.js"></script>
+
+    <script src="https://cdn.e-gob.app/libs/ajs/ngStorage.min.js"></script>
+    <script src="https://cdn.e-gob.app/Demo-3af0/GDPlatformConstants.js"></script>
+    <script src="https://cdn.e-gob.app/Demo-3af0/GDPlatformServices.min.js"></script>
+
+    <!-- BEGIN Quick Menu -->
+    <!-- to add more items, please make sure to change the variable '$menu-items: number;' in your _page-components-shortcut.scss -->
+    <nav class="shortcut-menu d-none d-sm-block">
+        <input type="checkbox" class="menu-open" name="menu-open" id="menu_open" />
+        <label for="menu_open" class="menu-open-button ">
+            <span class="app-shortcut-icon d-block"></span>
+        </label>
+        <a href="#" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Ir hacia arriba">
+            <i class="fal fa-arrow-up"></i>
+        </a>
+        <a class="menu-item btn" ng-click="LogOut()" data-toggle="tooltip" data-placement="left" title="Cerrar sesión">
+            <i class="fal fa-sign-out"></i>
+        </a>
+        <a href="#" class="menu-item btn" data-action="app-fullscreen" data-toggle="tooltip" data-placement="left" title="Pantalla completa">
+            <i class="fal fa-expand"></i>
+        </a>
+
+        <a href="#" class="menu-item btn" data-action="app-print" data-toggle="tooltip" data-placement="left" title="Imprimir página">
+            <i class="fal fa-print"></i>
+        </a>
+
+    </nav>
+    <!-- BEGIN Page Settings -->
+    <div class="modal fade js-modal-settings modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-right modal-md">
+            <div class="modal-content">
+                <div class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center w-100">
+                    <h4 class="m-0 text-center color-white">
+                        Configuración tamaño de letra
+                        <small class="mb-0 opacity-80">Configuración del tamaño de letra</small>
+                    </h4>
+                    <button type="button" class="close text-white position-absolute pos-top pos-right p-2 m-1 mr-2" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="settings-panel">
+
+                        <hr class="mb-0 mt-4">
+                        <div class="mt-4 d-table w-100 pl-5 pr-3">
+                            <div class="d-table-cell align-middle">
+                                <h5 class="p-0">
+                                    Tamaño de letra
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="list mt-1">
+                            <div class="btn-group btn-group-sm btn-group-toggle my-2" data-toggle="buttons">
+                                <label class="btn btn-default btn-sm" data-action="toggle-swap" data-class="root-text-sm" data-target="html">
+                                    <input type="radio" name="changeFrontSize"> Pequeña
+                                </label>
+                                <label class="btn btn-default btn-sm" data-action="toggle-swap" data-class="root-text" data-target="html">
+                                    <input type="radio" name="changeFrontSize" checked=""> Mediana
+                                </label>
+                                <label class="btn btn-default btn-sm" data-action="toggle-swap" data-class="root-text-lg" data-target="html">
+                                    <input type="radio" name="changeFrontSize"> Grande
+                                </label>
+                                <label class="btn btn-default btn-sm" data-action="toggle-swap" data-class="root-text-xl" data-target="html">
+                                    <input type="radio" name="changeFrontSize"> Extra Grande
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Quick Menu -->
+
+    @RenderSection("scripts", required: false)
+
+
+
+
+
+    <!-- NOTAS | RECOMENDACIONES  -->
+    <!--
+        mover todo el Js de los htmls a archivos independientes y agruparlos, si son configuraciones de librerias ya existe un archivo para ello
+    -->
+    <script>
+
+        var controls = {
+            leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+            rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>'
+        }
+        $(document).ready(function () {
+            $.fn.modal.Constructor.prototype.enforceFocus = function () { };
+            //select2EntidadFederativa
+
+            //$(".selectAplicaPara").select2({
+            //});
+            //$(".selectMotivoDiasInhabiles").select2({
+            //});
+
+            $('#datepicker-2').datepicker(
+                {
+                    days: ["Domingo", "Lunes", "Martes", "MiÃ©rc", "Jueves", "Viernes", "SÃ¡bado"],
+                    daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "SÃ¡b"],
+                    daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                    monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                    format: 'dd/mm/yyyy',
+                    startDate: "01/01/2000",
+                    endDate: "31/12/2025",
+                    todayHighlight: true,
+                    orientation: "bottom left",
+                    autoclose: true,
+                    language: 'es',
+                });
+
+            $('#datepicker-3').datepicker(
+                {
+                    days: ["Domingo", "Lunes", "Martes", "MiÃ©rc", "Jueves", "Viernes", "SÃ¡bado"],
+                    daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "SÃ¡b"],
+                    daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                    monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                    format: 'dd/mm/yyyy',
+                    startDate: "01/01/2000",
+                    endDate: "31/12/2025",
+                    todayHighlight: true,
+                    orientation: "bottom left",
+                    autoclose: true,
+                    language: 'es',
+                })
+
+            $.fn.datepicker.dates['default'] = {
+                days: ["Domingo", "Lunes", "Martes", "MiÃ©rc", "Jueves", "Viernes", "SÃ¡bado"],
+                daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "SÃ¡b"],
+                daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                today: "Today",
+                clear: "Clear",
+                format: "dd/mm/yyyy",
+                titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
+                weekStart: 0
+            };
+
+            $('#datepicker-Rango').datepicker(
+                {
+                    language: 'default',
+                    format: 'dd/mm/yyyy',
+                    startDate: "01/01/2000",
+                    endDate: "31/12/2025",
+                    todayHighlight: true,
+                    orientation: "bottom left",
+                    autoclose: true,
+                });
+
+            IniciarTrim();
+            IniciarAddDays();
+
+
+            $('.nav-menu a').filter(function () {
+                return this.href == location.href
+            }).parent().addClass('active').siblings().removeClass('active')
+
+
+            $('.nav-menu a').click(function () {
+                $(this).parent().addClass('active').siblings().removeClass('active')
+            })
+
+            $('.nav-menu a').filter(function () {
+                return this.href == location.href
+            }).parent().parent().parent().addClass('active').siblings().removeClass('active')
+
+
+            $('.nav-menu a').click(function () {
+                $(this).parent().parent().parent().addClass('active').siblings().removeClass('active')
+            })
+
+
+            // initialize datatable
+            $('#dt-basic-example').dataTable(
+                {
+                    responsive: true,
+                    lengthChange: false,
+                    language: {
+                        search: '<div class=" d-inline-flex width-3 align-items-center justify-content-center border-bottom-right-radius-0 border-top-right-radius-0 border-right-0"><i class="fal fa-search"></i></div>',
+                        searchPlaceholder: "Buscar"
+                    },
+                    dom:
+                        "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    buttons: [
+                        {
+                            text: 'Nuevo',
+                            action: function (e, dt, node, config) {
+                                document.location.href = "~/Administracion/UnidadesAdministrativas";
+                            },
+                            className: 'btn btn-primary btn-sm mr-1'
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            titleAttr: 'Generate PDF',
+                            className: 'btn btn-info btn-sm mr-1'
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Excel',
+                            titleAttr: 'Generate Excel',
+                            className: 'btn btn-info btn-sm mr-1'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: 'CSV',
+                            titleAttr: 'Generate CSV',
+                            className: 'btn btn-info btn-sm mr-1'
+                        },
+                        {
+                            extend: 'copyHtml5',
+                            text: 'Copiar',
+                            titleAttr: 'Copy to clipboard',
+                            className: 'btn btn-info btn-sm mr-1'
+                        }
+                    ]
+                });
+
+            $.fn.dataTable.render.moment = function (from, to, locale) {
+                // Argument shifting
+                if (arguments.length === 1) {
+                    locale = 'en';
+                    to = from;
+                    from = 'YYYY/MM/DD';
+                }
+                else if (arguments.length === 2) {
+                    locale = 'en';
+                }
+
+                return function (d, type, row) {
+                    if (!d) {
+                        return type === 'sort' || type === 'type' ? 0 : d;
+                    }
+
+                    var m = window.moment(d, from, locale, true);
+
+                    // Order and type get a number value from Moment, everything else
+                    // sees the rendered value
+                    return m.format(type === 'sort' || type === 'type' ? 'x' : to);
+                };
+            };
+
+            $('.tablaPSRPrincipal').dataTable(
+                {
+                    responsive: true,
+                    lengthChange: false,
+                    language: {
+                        search: '<div class=" d-inline-flex width-5 align-items-center justify-content-center border-bottom-right-radius-0 border-top-right-radius-0 border-right-0"><i class="fal fa-search"></i></div>',
+                        searchPlaceholder: "Buscar",
+                        /*pageLength = 10,*/
+                        paginate: {
+                            "first": "Primero",
+                            "last": "Ultimo",
+                            "next": "Siguiente",
+                            "previous": "Previo"
+                        },
+                        emptyTable: " ",
+                        zeroRecords: "No se encuentra",
+                        info: "Mostrando  [ _START_ - _END_ ]     Registros: _TOTAL_ ",
+                        //info: "Registros: _TOTAL_ ",
+                        infoEmpty: "Sin registros disponibles",
+                        infoFiltered: " (Filtrado de _MAX_ totales)",
+                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> '
+                    },
+                    "processing": true,
+                    "columnDefs": [
+                        //"searchable": false
+                        { "className": "dt-center", "targets": "_all" },
+                        { "targets": ['no-sort', 'not-export-col'], "orderable": false },
+                        //{
+                        //    "targets": "sortdate",
+                        //    "render": "$.fn.dataTable.render.moment('dddd D MMMM YYYY')"
+                        //},
+                    ],
+                    //"dom": 'lrtip'
+                    //"dom": 'Bfrtip'
+                    //"dom": '<"wrapper"flipt>'
+                    //"dom": '<lf<t>ip>'
+                    //"dom": '<"top"i>rt<"bottom"flp><"clear">'
+                    dom:
+                        "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    buttons: [
+                        {
+                            bom: true,
+                            extend: 'excelHtml5',
+                            text: 'Excel',
+                            titleAttr: 'Generate Excel',
+                            className: 'btn btn-info btn-sm mr-1',
+                            exportOptions: {
+                                columns: ':visible:not(.not-export-col)'
+                            }
+                        },
+                        {
+                            bom: true,
+                            extend: 'csvHtml5',
+                            text: 'CSV',
+                            titleAttr: 'Generate CSV',
+                            className: 'btn btn-info btn-sm mr-1',
+                            exportOptions: {
+                                columns: ':visible:not(.not-export-col)'
+                            }
+                        }
+                    ]
+                }
+            );
+        });
+    </script>
+</body>
+<!-- END Body -->
+</html>
+

@@ -1,0 +1,269 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-users'></i> Grupos de atención
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-controller="crtlGrupoAtencion" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Nuevo" data-target="#default-example-modal-lg" onclick="MostrarFormularios()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Grupo de atención</th>
+                                    <th>Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tabla in tablaView | filter:FiltrarPrincipal">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(tabla, 'Actualizar')" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Listado" data-target="#default-example-modal-lg" ng-click="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-tag">
+                Datos generales
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group-prepend">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text  ">Buzón</div>
+                            <select class="form-control" id="cmbUnidades"
+                                    ng-options="buzon.NombreBuzon for buzon in Buzones" ng-change="SetBuzonGrupoAtencion(buzon)"
+                                    ng-model="buzon">
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre del grupo</div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtPuesto" ng-model="grupoAtencion.Nombre" class="form-control" placeholder="Nombre del grupo de atención">
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Descripción</div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtAbreviatura" ng-model="grupoAtencion.Descripcion" class="form-control" placeholder="Descripción">
+                    </div>
+                </div>
+            </div>
+            <div class="panel-tag">
+                Usuarios
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="form-group">
+                    <div class="frame-wrap">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#tabla-usuarios">Agregar Usuario</button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Nombre Empleado</th>
+                                <th>Nombre puesto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="empleadoSeleccionado in EmpleadosSeleccionados">
+                                <td align="center">
+                                    <a href='#' data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                                <td>{{empleadoSeleccionado.NombreCompleto}}</td>
+                                <td>{{empleadoSeleccionado.PuestoInstitucional.NombrePuesto}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-tag">
+                Filtros
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="form-group">
+                    <div class="frame-wrap">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#tabla-filtros">Agregar Filtro</button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Nombre Filtro</th>
+                                <th>Nombre Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="filtroGrupo in FiltrosSeleccionados">
+                                <td align="center">
+                                    <a href='#' data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                                <td>{{filtroGrupo.Nombre}}</td>
+                                <td>{{filtroGrupo.Display}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                            <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Guardar</button>
+                            <button type="button" ng-show="btnEliminar" ng-click="EliminarObjetoNegocio()" class="btn btn-primary">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal hide fade" id="tabla-usuarios" style="z-index: 6100;">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-white bg-primary-500">
+                            <h5 class="modal-title">Usuarios</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row row align-items-center">
+                                <div class="col-12 col-lg-12">
+                                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Editar</th>
+                                                <th>Nombre Empleado</th>
+                                                <th>Nombre puesto</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="empleado in EmpleadosBuzon | filter:EsUsuario">
+                                                <td align="center">
+                                                    <a href='#' data-toggle="modal" data-backdrop="static" ng-click="IngresarEmpleado(empleado)" data-keyboard="false" data-target="#frmAltaEmpleado" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                                    <div class='dropdown d-inline-block'></div>
+                                                </td>
+                                                <td>{{empleado.NombreCompleto}}</td>
+                                                <td>{{empleado.PuestoInstitucional.NombrePuesto}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12">
+                                <div class="frame-wrap">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal hide fade" id="tabla-filtros" style="z-index: 6200;">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-white bg-primary-500">
+                            <h5 class="modal-title">Usuarios</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row row align-items-center">
+                                <div class="col-12 col-lg-12">
+                                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Seleccionar</th>
+                                                <th>Filtro</th>
+                                                <th>Descripción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="filtro in buzon.Filtros">
+                                                <td align="center">
+                                                    <a href='#' data-toggle="modal" data-backdrop="static" ng-click="IngresarFiltro(filtro);" data-keyboard="false" data-target="#frmConfiguracionBuzon" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                                    <div class='dropdown d-inline-block'></div>
+                                                </td>
+                                                <td>{{filtro.Nombre}}</td>
+                                                <td>{{filtro.Display}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12">
+                                <div class="frame-wrap">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/GruposAtencion.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

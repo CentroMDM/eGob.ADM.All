@@ -1,0 +1,133 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-id-card'></i> Pistas de auditoría
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlAuditoria" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        @*<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>*@
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="panel-tag">
+                        Filtrar
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Aplicación&nbsp <abbr title="Requerido" class="text-danger">*</abbr></label>
+                                </div>
+                                <select class="form-control" aria-label="small" aria-describedby="label"
+                                        ng-options="Applicacion as Applicacion.NombreAplicacion for Applicacion in AplicacionesPSR"
+                                        ng-model="Applicacion" ng-change="">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Usuario</label>
+                                </div>
+                                <select class="form-control" aria-label="small" aria-describedby="label"
+                                        ng-options="Usuario as Usuario.NombreEmpleado for Usuario in ListUsuarios"
+                                        ng-model="Usuario" ng-change="">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-6">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Fecha de Inicio</div>
+                                </div>
+                                <input type="text" class="form-control" autocomplete="off" ng-model="Implementacion.FechaInicio" placeholder="Fecha de Inicio" id="datepicker-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="min-width: 30px; text-align:center">
+                                        <i class="fal fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Fecha de Fin</div>
+                                </div>
+                                <input type="text" class="form-control" autocomplete="off" ng-model="Implementacion.FechaFin" placeholder="Fecha de Fin" id="datepicker-3">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="min-width: 30px; text-align:center">
+                                        <i class="fal fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div align="right">
+                            <div>
+                                <button type="submit" class="btn btn-primary" ng-click="setNewRol()">Filtrar</button>
+                                <button type="submit" class="btn btn-primary" ng-click="setNewRol()">Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="panel-tag">
+                        Auditoría
+                    </div>
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                        <thead>
+                            <tr>
+                                <th class="no-sort not-export-col">Detalle</th>
+                                <th class="no-sort">Usuario</th>
+                                <th class="no-sort">Estatus Usuario</th>
+                                <th class="no-sort">Objeto</th>
+                                <th class="no-sort">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="empleado in EmpleadosAux ">
+                                <td align="center">
+                                    <a href='#' ng-click="EditarEmpleado(empleado)" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                </td>
+                                <td>{{empleado.NombreEmpCompleto}}</td>
+                                <td>{{empleado.NombrePuesto}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/PistasDeAuditoria/PistasDeAuditoriaController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

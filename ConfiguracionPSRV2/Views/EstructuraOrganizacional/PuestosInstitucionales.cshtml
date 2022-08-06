@@ -1,0 +1,145 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-list'></i> Catálogo de Puestos Institucionales
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlPuesto" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-toggle="tooltip" data-backdrop="static" data-keyboard="false" data-target="#default-example-modal-lg" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Nombre de la unidad</th>
+                                    <th>Nombre del puesto</th>
+                                    <th>Descripción del puesto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tabla in tablaView">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(tabla, 'Actualizar')" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td>{{tabla.NombreUA}}</td>
+                                    <td>{{tabla.NombrePuesto}}</td>
+                                    <td>{{tabla.DescripcionPuesto}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#default-example-modal-lg" ng-click="MostrarListado()"><i class="fal fa-arrow-left"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Unidad administrativa&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <select class="form-control status" aria-label="small" aria-describedby="label"
+                                ng-options="unidad.RIDUnidadAdministrativa as unidad.NombreUA for unidad in unidades | filter:FiltrarPrincipal"
+                                ng-model="newPuesto.ClaveUnidadAdministrativa" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nivel del puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <select class="form-control status" aria-label="small" aria-describedby="label"
+                                ng-options="nivel.RIDNivel as nivel.Nombre for nivel in NivelPuesto"
+                                ng-model="newPuesto.ClaveNivelPuesto" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre del puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtPuesto" class="form-control" placeholder="Nombre del puesto" ng-model="newPuesto.NombrePuesto" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Abreviatura&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtAbreviatura" class="form-control" placeholder="Abreviatura" ng-model="newPuesto.Abreviatura" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Descripción del puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtDescripcion" class="form-control" placeholder="Descripción del puesto" ng-model="newPuesto.descripcionPuesto" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                            <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Actualizar</button>
+                            <button type="button" ng-show="btnEliminar" ng-click="EliminarPuesto()" class="btn btn-primary">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/EstructuraOrganizacional/PuestosController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}
+
+
+
+

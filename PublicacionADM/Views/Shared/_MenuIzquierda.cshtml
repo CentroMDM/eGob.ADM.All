@@ -1,0 +1,44 @@
+﻿
+<div class="info-card">
+    <img src="~/Assets/img/user_925901.svg" class="profile-image">
+    <div class="info-card-text">
+        <a href="#" class="d-flex align-items-center text-white">
+            <span class="text-truncate text-truncate-sm d-inline-block">{{User}}@*Felipe de Jesús*@</span>
+        </a>
+        <span class="d-inline-block text-truncate text-truncate-sm">{{UA}}@*Secretaría de Finanzas*@</span>
+    </div>
+    @*<img src="~/Assets/img/1080x360.jpg" class="cover" alt="cover">*@
+    <img src="{{LogoInst}}" class="cover img-fluid" alt="Logo Institucional">
+</div>
+
+
+
+
+<nav id="js-primary-nav" ng-cloak class="primary-nav" role="navigation">
+   <ul id="js-nav-menu" class="nav-menu">
+        @*Inicio de Generacion de Menu*@
+        <li class="" ng-repeat="M in MenuIzq">
+            <a href="{{M.DireccionURL}}" class="nav-link">
+                <i class="nav-icon fal {{M.IconFontawesome}}"></i>
+                <span class="nav-link-text">{{M.NombreModulo}}</span>
+            </a>
+            <ul class="">
+                <li class="nav-item" ng-repeat="C in ListC = (M.ListCaracteristicas | filter: { ClaveModulo: M.RIDModulo })">
+                    <a href=" {{C.DireccionURL}}" class="nav-link">
+                        @*{{C.DireccionURL}}*@
+                        <i class="fa {{C.IconFontawesome}} nav-icon"></i><p>{{C.NombreCaracteristicas}}</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div class="filter-message js-filter-message bg-success-600"></div>
+</nav>
+
+@section scripts
+{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/Angular/angular.min.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

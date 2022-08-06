@@ -1,0 +1,111 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-diagnoses'></i> Secciones
+    </h1>
+</div>
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlVariables" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Nuevo" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th class="no-sort">Editar</th>
+                                    <th>Tipo</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tabla in tablaView">
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-toggle="tooltip" data-backdrop="static" data-keyboard="false" title="Listar" ng-click="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Formato</div>
+                        </div>
+                        <select class="form-control">
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Nombre</div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Descripción</div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                            <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Guardar</button>
+                            <button type="button" ng-show="btnEliminar" ng-click="EliminarObjetoNegocio()" class="btn btn-primary">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/VariablesConfiguracionController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}
+

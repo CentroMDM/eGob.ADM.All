@@ -1,0 +1,956 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-network-wired'></i> Unidades Administrativas
+    </h1>
+</div>
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlUnidadAdministrativa" ng-submit="mdmForm.$valid && ValidarAccion()">
+    @*Tabla inicial, con datos de las unidades*@
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Nuevo" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="modal" title="Organigrama" ng-click="ViewOrg()" data-target="#tabla-organigrama"><i class="fal fa-sitemap"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Nombre unidad</th>
+                                    <th>Titular</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tabla in tablaView | filter:FiltrarPrincipal">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(tabla, 'Actualizar')" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td>{{tabla.NombreUA}}</td>
+                                    <td>{{tabla.NombreEmpleado}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*Insertar datos de las unidades Administrativas*@
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Listado" data-target="#default-example-modal-lg" ng-click="MostrarListado()"><i class="fal fa-arrow-left"></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="modal" title="Organigrama" ng-click="ViewOrg()" data-target="#tabla-organigrama"><i class="fal fa-sitemap"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            @*Datos generales, unidades Administrativas*@
+            <div ng-show="unidadPadre">
+                <div class="panel-tag">
+                    Unidad administrativa de la que depende.
+                </div>
+                @*Unidad Padre*@
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group-prepend">
+                            <div class="input-group mb-2">
+                                <div class="input-group-text  ">Unidad Administrativa&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                <select class="form-control" id="unidadesAdministrativasPrincipal"
+                                        ng-options="UnidadAdm as UnidadAdm.NombreUA for UnidadAdm in tablaView"
+                                        ng-model="UnidadAdm.ClaveUAPadre" required>
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="panel-tag">
+                Datos Generales
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-8">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre Unidad&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" id="txtPuesto" class="form-control" autocomplete="off" ng-model="UnidadAdm.NombreUA" placeholder="Nombre de la unidad administrativa" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Abreviatura&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" id="txtAbreviatura" class="form-control" autocomplete="off" ng-model="UnidadAdm.AbreviaturaUA" placeholder="Abreviatura" required>
+                    </div>
+                </div>
+                <div ng-show="TitularUA" class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Titular</div>
+                        </div>
+                        <div class="s2-container-good">
+                            <select class="form-control " aria-label="small" aria-describedby="label"
+                                    ng-options="empleado.RIDEmpleado as empleado.NombreCompleto for empleado in Empleados"
+                                    ng-model="datosUnidadAdm.ClaveEmpleado">
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Logotipo de la Unidad&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        @*<input type="file" accept=".png, .svg" id="PhotoDatoGeneral" style="display: none;" onchange="angular.element(this).scope().cargaImagenRe(event)">*@
+                        <input type="file" accept=".png, .svg" id="PhotoDatoGeneral" style="display: none;" onchange="angular.element(this).scope().cargaImagenRe(event)">
+                        <input readonly type="text" autocomplete="off" ng-model="UnidadAdm.DirectorioSecundarioLogo" class="form-control" placeholder="Logotipo de la Unidad en formato png y/o svg" required>
+                        <input type="button" value="Buscar" onclick="document.getElementById('PhotoDatoGeneral').click();" />
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12" ng-show="LogoConfiguracionUA != null">
+                    <img ng-src="{{LogoConfiguracionUA}}" alt="" style="height:150px;width:150px" />
+                    <br><br>
+                </div>
+            </div>
+            <br />
+            <div class="panel-tag">
+                Domicilio
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Entidad Federativa&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" id="txtEntidad" ng-disabled="true" ng-model="UnidadAdm.Estado" ng-value="UnidadAdm.Estado = EntidadFederativa.Estado" class="form-control" placeholder="Entidad Federativa">
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Municipio&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <div class="s2-container-good">
+                            <select class="form-control select2ADM" aria-label="small" aria-describedby="label"
+                                    ng-options="municipio as municipio.Municipio for municipio in Municipios"
+                                    ng-model="UnidadAdm.municipio" ng-change="ObtenerCP(UnidadAdm.municipio.RIDMunicipio);" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="sr-only" for="inlineFormInputGroup"></label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Código Postal&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <div class="s2-container-good">
+                            <select class="form-control select2ADM" aria-label="small" aria-describedby="label"
+                                    ng-options="cp as cp.CP for cp in CPS"
+                                    ng-model="UnidadAdm.CodigoPostal" ng-change="ObtenerColonias(UnidadAdm.CodigoPostal.CP)" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Colonia&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <div class="s2-container-good">
+                            <select class="form-control select2ADM" aria-label="small" aria-describedby="label"
+                                    ng-options="colonia as colonia.NombreAsentamiento for colonia in Colonias"
+                                    ng-model="UnidadAdm.Colonia" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Calle&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" id="txtCalle" ng-model="UnidadAdm.Calle" autocomplete="off" class="form-control" placeholder="Calle" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="sr-only" for="inlineFormInputGroup"></label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Número Exterior&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" id="txtNumeroExterior" ng-model="UnidadAdm.NumExt" autocomplete="off" class="form-control" placeholder="Número exterior" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="sr-only" for="inlineFormInputGroup"></label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Número Interior </div>
+                        </div>
+                        <input type="text" id="txtNumeroInterior" ng-model="UnidadAdm.NumInt" autocomplete="off" class="form-control" placeholder="Número interior">
+                    </div>
+                </div>
+            </div>
+            @*Unidades Hijas*@
+            <div ng-show="unidadesHijas">
+                <br />
+                <div class="panel-tag">
+                    Unidades Administrativas Dependientes
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                            <thead>
+                                <tr>
+                                    <th>Ver</th>
+                                    <th>Nombre Unidad</th>
+                                    <th>Titular</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tablaUD in tablaUnidadesDependientes track by $index ">
+                                    <td align="center">
+                                        <a href='#' ng-click="MostrarInformacionUnidad(tablaUD.RIDUnidadAdministrativa)" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#UnidadHija" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Ver'><i class='fal fa-eye'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td> &nbsp; {{tablaUD.NombreUA}}</td>
+                                    <td> &nbsp; {{tablaUD.NombreEmpleado}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            @*Aplicaciones*@
+            <div class="panel-tag">
+                Aplicación
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="form-group">
+                    <div class="frame-wrap">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="NuevoBuzon()" data-backdrop="static" data-keyboard="false" data-target="#frmConfiguracionBuzon">Agregar Aplicación</button>
+                    </div>
+                </div>
+                <div ng-show="aplicacionesConfiguradas" class="col-12 col-lg-12">
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Nombre Buzón</th>
+                                <th>Alias</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="buz in UnidadAdm.aplicacionPlataforma">
+                                <td align="center">
+                                    <a data-toggle="modal" data-backdrop="static" ng-click="CargarBuzon(buz);" data-keyboard="false" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' data-target="#frmConfiguracionBuzon" title='Editar'><i class='fal fa-edit'></i></a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                                <td>{{buz.NombreBuzon}}</td>
+                                <td>{{buz.AliasBuzon}}</td>
+                                <td>{{buz.Descripcion}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @*Empleados*@
+            <div class="panel-tag">
+                Empleados
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="form-group">
+                    <div class="frame-wrap">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="nuevoEmpleado()" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado">Agregar Empleado</button>
+                    </div>
+                </div>
+                <div ng-show="empleadosDeUnidad" class="col-12 col-lg-12">
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Nombre Empleado</th>
+                                <th>Nombre Puesto</th>
+                                <th>Titular</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="empleado in NewPuesto.Empleados">
+                                <td align="center">
+                                    <a href='#' ng-click="EditarEmpleado(empleado)" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                                <td>{{empleado.NombreEmpleado}} {{empleado.APaterno}} {{empleado.AMaterno}}</td>
+                                <td>{{empleado.Puesto.NombrePuesto}} {{empleado.NombrePuesto}}</td>
+                                <td align="center">
+                                    <a ng-hide="empleado.Titular == true"
+                                       ng-click="AgregarTitular(empleado);"
+                                       title='Seleccionar'
+                                       ng-mouseleave="AgregaUnTitular=false"
+                                       class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                        <i ng-show="AgregaUnTitular" class='fal fa-check'></i>
+                                        <i ng-hide="AgregaUnTitular" class='fal fa'></i>
+                                    </a>
+                                    <a ng-show="empleado.Titular == true"
+                                       ng-click="AgregarTitular(empleado);"
+                                       title='Seleccionar'
+                                       ng-mouseleave="AgregaUnTitular=false"
+                                       class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                        <i ng-show="AgregaUnTitular" class='fal fa'></i>
+                                        <i ng-hide="AgregaUnTitular" class='fal fa-check'></i>
+                                    </a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @*Guardar unidad*@
+            <div class="form-row row align-items-center">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" ng-show="btnGuardar" ng-click="GuardarObjetoNegocio()" class="btn btn-primary">Aceptar</button>
+                            <button type="submit" ng-show="btnActualizar" ng-click="ActualizarObjetoNegocio()" class="btn btn-primary">Aceptar</button>
+                            <button type="button" ng-show="btnEliminar" ng-click="EliminarObjetoNegocio()" class="btn btn-primary">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Organigrama*@
+    <div class="modal hide fade" id="tabla-organigrama" style="z-index: 5900;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Organigrama de la organización</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div align="center" id="chart-container"></div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Inicia Modal de unidades hijas *@
+    <div class="modal hide fade" id="UnidadHija" style="z-index: 6000;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Unidad Administrativa - {{UnidadJerarquica.NombreUA}}</</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-tag">
+                        Unidad administrativa de la que depende.
+                    </div>
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Unidad Administrativa</div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.NombrePadre" autocomplete="off" class="form-control" placeholder="Unidad Administrativa" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="panel-tag">
+                        Datos Generales
+                    </div>
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-8">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nombre de la Unidad</div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.NombreUA" autocomplete="off" class="form-control" placeholder="Nombre de la Unidad Administrativa" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Abreviatura</div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.AbreviaturaUA" autocomplete="off" class="form-control" placeholder="Abreviatura" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Titular</div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.NombreEmpleado" autocomplete="off" class="form-control" placeholder="Titular" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Logotipo de la Unidad</div>
+                                </div>
+                                <input type="text" autocomplete="off" ng-model="UnidadJerarquica.DirectorioSecundarioLogo" class="form-control" placeholder="Logotipo" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12" ng-show="UnidadJerarquica.LogoUnidad != null">
+                            <img ng-src="{{UnidadJerarquica.LogoUnidad}}" alt="" style="height:150px;width:150px" />
+                            <br><br>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="panel-tag">
+                        Domicilio
+                    </div>
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Entidad Federativa</div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.Estado" class="form-control" placeholder="Entidad" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Municipio</div>
+                                </div>
+                                <div class="s2-container-good">
+                                    <input type="text" ng-model="UnidadJerarquica.Municipio" class="form-control" placeholder="Ciudad o municipio" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label class="sr-only" for="inlineFormInputGroup"></label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Código Postal</div>
+                                </div>
+                                <div class="s2-container-good">
+                                    <input type="text" ng-model="UnidadJerarquica.CodigoPostal" class="form-control" placeholder="Ciudad o municipio" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Colonia</div>
+                                </div>
+                                <div class="s2-container-good">
+                                    <input type="text" ng-model="UnidadJerarquica.NombreAsentamiento" class="form-control" placeholder="Colonia" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Calle</div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.Calle" autocomplete="off" class="form-control" placeholder="Calle" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label class="sr-only" for="inlineFormInputGroup"></label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Número Exterior</div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.NumExt" autocomplete="off" class="form-control" placeholder="Número exterior" onkeydown="return /^[a-zA-Z0-9 ]/i.test(event.key)" disabled>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label class="sr-only" for="inlineFormInputGroup"></label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Número Interior </div>
+                                </div>
+                                <input type="text" ng-model="UnidadJerarquica.NumInt" autocomplete="off" class="form-control" placeholder="Número interior" onkeydown="return /^[a-zA-Z0-9 ]/i.test(event.key)" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div ng-show="unidadesHijasHijas">
+                        <div class="panel-tag">
+                            Unidades Administrativas Dependientes
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <table class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre Unidad</th>
+                                            <th>Titular</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="tablaUDH in tablaUnidadesDependientesHijas">
+                                            <td> &nbsp; {{tablaUDH.NombreUA}}</td>
+                                            <td> &nbsp; {{tablaUDH.NombreEmpleado}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" ng-click="CancelarHija()">Aceptar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Aplicaciones configuradas*@
+    <div class="modal hide fade" id="frmConfiguracionBuzon" style="z-index: 6000;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Configuración de la aplicación</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Tipo de aplicación&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <select class="form-control" aria-label="small" aria-describedby="label"
+                                        ng-options="buzones as buzones.NombreAplicacion for buzones in aplicaciones"
+                                        ng-model="buzones.ClaveTipoBuzon" required>
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nombre de la aplicación&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" ng-model="buzones.NombreBuzon" placeholder="Nombre de la aplicación" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Descripción&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" ng-model="buzones.Descripcion" placeholder="Descripción" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Alias&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" ng-model="buzones.AliasBuzon" placeholder="Alias" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Logotipo&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="file" accept=".png, .svg" id="selectPhotoApp" style="display: none;" onchange="angular.element(this).scope().uploadedImage(event)">
+                                <input readonly type="text" autocomplete="off" ng-model="buzones.DirectorioSecundarioLogo" class="form-control" placeholder="Logotipo de la aplicación en formato png y/o svg" required>
+                                <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoApp').click();" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12" ng-show="LogoAppLogo != null">
+                            <img ng-src="{{LogoAppLogo}}" alt="" style="height:150px;width:150px" />
+                            <br><br>
+                        </div>
+                    </div>
+                    @*Muestra Filtros escogidos*@
+                    <div class="panel-tag">
+                        Filtros
+                    </div>
+                    <div class="form-row row align-items-center">
+                        <div class="form-group">
+                            <div class="frame-wrap">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="NuevoFiltro()" data-target="#tabla-filtros">Agregar filtro</button>
+                            </div>
+                        </div>
+                        <div ng-show="tablaFiltros" class="col-12 col-lg-12">
+                            <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Eliminar</th>
+                                        <th>Filtro</th>
+                                        <th>Nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="filtro in FiltroBuzon">
+                                        <td align="center">
+                                            <a href='#' ng-click="EliminaFiltro(filtro)" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmConfiguracionBuzon2" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                            <div class='dropdown d-inline-block'></div>
+                                        </td>
+                                        <td>{{filtro.Nombre}}</td>
+                                        <td>{{filtro.Display}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" ng-click="ImplementarNuevoBuzon()">Aceptar</button>
+                            <button type="button" class="btn btn-primary" ng-click="CancelarBuzon()">Cancelar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Filtros de aplicaciones*@
+    <div class="modal hide fade" id="tabla-filtros" style="z-index: 6100;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Filtros</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Filtro</div>
+                                </div>
+                                <select class="form-control"
+                                        ng-options="filter.Nombre for filter in Filtros"
+                                        ng-model="filter" ng-change="MostrarFiltro(filter)">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                        @*Filtros con descripción*@
+                        <div ng-show="tablaFiltrosASeleccionar" class="col-12 col-lg-12">
+                            <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Seleccionar</th>
+                                        <th>Filtro</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="filtroBuzon in FiltrosBuzon">
+                                        <td align="center">
+                                            <a ng-hide="MuestraBoton && filtroBuzon.botonMM ==true || filtroBuzon.check" data-backdrop="static"
+                                               ng-click="AgregarFiltroBuzon(filtroBuzon);"
+                                               ng-mouseleave="AgregarFiltroBoton=false"
+                                               title='Seleccionar'
+                                               class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                                <i ng-show="AgregarFiltroBoton" class='fal fa-check'></i>
+                                                <i ng-hide="AgregarFiltroBoton" class='fal fa'></i>
+                                            </a>
+                                            <a ng-show="MuestraBoton && filtroBuzon.botonMM == true || filtroBuzon.check" data-backdrop="static"
+                                               ng-click="AgregarFiltroBuzon(filtroBuzon);"
+                                               ng-mouseleave="AgregarFiltroBoton=false"
+                                               title='Quitar'
+                                               class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                                <i ng-show="AgregarFiltroBoton" class='fal fa'></i>
+                                                <i ng-hide="AgregarFiltroBoton" class='fal fa-check'></i>
+                                            </a>
+                                            <div class='dropdown d-inline-block'></div>
+                                        </td>
+                                        <td>{{filtroBuzon.Display}}</td>
+                                        <td>{{filtroBuzon.Descripcion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @*Filtros sin descripción*@
+                        <div ng-show="tablaFiltrosASeleccionar2" class="col-12 col-lg-12">
+                            <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Seleccionar</th>
+                                        <th>Filtro</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="filtroBuzon in FiltrosBuzon">
+                                        <td align="center">
+                                            <a ng-hide="MuestraBoton && filtroBuzon.botonMM ==true || filtroBuzon.check" data-backdrop="static"
+                                               ng-click="AgregarFiltroBuzon(filtroBuzon);"
+                                               ng-mouseleave="AgregarFiltroBoton=false"
+                                               title='Seleccionar'
+                                               class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                                <i ng-show="AgregarFiltroBoton" class='fal fa-check'></i>
+                                                <i ng-hide="AgregarFiltroBoton" class='fal fa'></i>
+                                            </a>
+                                            <a ng-show="MuestraBoton && filtroBuzon.botonMM == true || filtroBuzon.check" data-backdrop="static"
+                                               ng-click="AgregarFiltroBuzon(filtroBuzon);"
+                                               ng-mouseleave="AgregarFiltroBoton=false"
+                                               title='Quitar'
+                                               class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                                <i ng-show="AgregarFiltroBoton" class='fal fa'></i>
+                                                <i ng-hide="AgregarFiltroBoton" class='fal fa-check'></i>
+                                            </a>
+                                            <div class='dropdown d-inline-block'></div>
+                                        </td>
+                                        <td>{{filtroBuzon.Display}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" ng-click="AsignarFiltros()">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Modal agrega empleado*@
+    <div class="modal hide fade" id="frmAltaEmpleado" style="z-index: 6000;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Alta de empleados</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <div class="s2-container-good">
+                                    <select class="form-control select2ADM" aria-label="small" aria-describedby="label"
+                                            ng-options="lsPuestos as lsPuestos.NombrePuesto for lsPuestos in Puestos"
+                                            ng-model="Emp.Puesto" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="agregarPuesto()" data-backdrop="static" data-keyboard="false" data-target="#frmPuestos">Nuevo Puesto</button>
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Número de empleado&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Número de empleado" ng-model="Emp.NumeroEmpleado" onkeydown="return /^[a-zA-Z0-9]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nombre&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Nombre" ng-model="Emp.NombreEmpleado" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Apellido paterno&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Apellido paterno" ng-model="Emp.APaterno" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Apellido materno&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Apellido materno" ng-model="Emp.AMaterno" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">RFC&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" style="text-transform:uppercase" autocomplete="off" class="form-control" placeholder="RFC" ng-model="Emp.RFCEmpleado" onkeydown="return /^[a-zA-Z0-9]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">E-mail&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="email" name="email" class="form-control" placeholder="E-mail" ng-model="Emp.correoEmpleado" ng-change="validarEmail()" required>
+                            </div>
+                        </div>
+                        <div id="#confirmaMail" class="col-12 col-lg-12" ng-hide="seActualiza == false && btnActualizar">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Confirmar E-mail&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="email" name="emailConfirma" class="form-control" compare-to="Emp.correoEmpleado" ng-model="Emp.confirmemail" placeholder="Confirmar E-mail">
+                            </div>
+                            <div id="#avisoConfirmaMail" class="col-12 col-lg-8">
+                                <span class="error text-danger" ng-show="Emp.correoEmpleado != Emp.confirmemail || Emp.confirmemail != Emp.correoEmpleado">
+                                    El email ingresado no es identico, favor de verificar.
+                                </span>
+                            </div>
+                            <div role="alert" class="col-12 col-lg-8">
+                                <span class="error text-danger" ng-show="mdmForm.emailConfirma.$error.email || mdmForm.email.$error.email">
+                                    El email ingresado no es válido, favor de verificar.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Fotografía&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="file" id="selectPhotoFotoEmpleado" style="display: none;" onchange="angular.element(this).scope().cargaImagenRe2(event)">
+                                <input readonly type="text" autocomplete="off" ng-model="Emp.DirectorioSecundarioFoto" class="form-control" placeholder="Fotografía en formato png y/o svg" required>
+                                <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoFotoEmpleado').click();" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12" ng-show="LogoConfiguracionLogo != null">
+                            <img ng-src="{{LogoConfiguracionLogo}}" alt="" style="height:150px;width:150px" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" ng-click="AgregarEmpleado()">Aceptar</button>
+                            <button type="button" class="btn btn-primary" ng-click="CancelarEmpleado()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Modal nuevo puesto*@
+    <div class="modal hide fade" id="frmPuestos" style="z-index: 6100;">
+        <div class="modal-dialog modal-lg modal-dialog-centered " role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Puestos Institucionales</h5>
+                </div>
+                <div class="modal-body modal-lg" style="height:250px;">
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nivel del puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <div class="s2-container-good">
+                                    <select class="form-control select2ADM" aria-label="small" aria-describedby="label"
+                                            ng-options="Nivel as Nivel.Nombre for Nivel in nivelesDePuestos"
+                                            ng-model="NewPuestos.ClaveNivelPuesto">
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nombre del puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" id="txtPuesto" class="form-control" placeholder="Nombre del puesto" ng-model="NewPuestos.NombrePuesto" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Abreviatura&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" id="txtAbreviatura" class="form-control" placeholder="Abreviatura" ng-model="NewPuestos.Abreviatura" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Descripción del puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                                </div>
+                                <input type="text" autocomplete="off" id="txtDescripcion" class="form-control" placeholder="Descripción del puesto" ng-model="NewPuestos.descripcionPuesto" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" ng-show="btnGuardarP" ng-click="agragaLsPuestos()" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-primary" ng-click="cancelarPuesto()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/Forms/jquery.orgchart.js"></script>
+    <script src="~/Assets/js/App/AppControladores/EstructuraOrganizacional/UnidadAdministrativaController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

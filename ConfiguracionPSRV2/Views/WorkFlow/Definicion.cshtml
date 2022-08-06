@@ -1,0 +1,400 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-chart-network'></i> Definición del flujo de trabajo
+    </h1>
+</div>
+
+<div ng-app="AppAdministracion" ng-cloak ng-controller="crtlWFDefinicion">
+    <form name="mdmForm" id="mdmForm" ng-cloak ng-submit="mdmForm.$valid && ValidarAccion()">
+        <div id="tablaInicial" style="display:block">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+                <div class="panel-container show">
+                    <div class="panel-content">
+                        <p>
+                            <table id="dt-resumen2" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                                <thead>
+                                    <tr>
+                                        <th class="no-sort">Editar</th>
+                                        <th>Título</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody align="center">
+                                    <tr ng-repeat="tabla in tablaDefinicion">
+                                        <td>
+                                            <a href='#' ng-click="ValidarTarea(tabla, 'Actualizar')" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                        </td>
+                                        <td>{{tabla.Nombre}}</td>
+                                        <td>{{tabla.Descripcion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="nuevoFormulario" style="display:none">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#" data-toggle="tooltip" data-backdrop="static" data-keyboard="false" title="Listar" ng-click="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Nombre</div>
+                            </div>
+                            <input type="text" autocomplete="off" ng-model="WFDefinicion.Nombre" class="form-control" placeholder="Nombre" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Descripción</div>
+                            </div>
+                            <input type="text" autocomplete="off" ng-model="WFDefinicion.Descripcion" class="form-control" placeholder="Descripción" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-tag">
+                    Procesos
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="form-group">
+                        <div class="frame-wrap">
+                            <button type="button" ng-disabled="btnAddProceso" class="btn btn-primary" data-toggle="modal" ng-click="NuevoProceso()" data-backdrop="static" data-keyboard="false" data-target="#frmProcesos">Agregar Proceso</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Proceso</th>
+                                    <th>Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tblProceso in tablaProcesos | filter: filterProcesoInicial">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTareaProceso(tblProceso, 'Actualizar')" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#frmProcesos" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    </td>
+                                    <td>{{tblProceso.NombreProcesoExterno}}</td>
+                                    <td>{{tblProceso.DescripcionProcesoExterna}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <br />
+                            <div class="frame-wrap">
+                                <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                                <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form name="mdmProceso" id="mdmProceso" ng-cloak ng-submit="mdmProceso.$valid && ValidarAccionProceso()">
+        <div class="modal hide fade" id="frmProcesos" style="z-index: 6000;">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-primary-500">
+                        <h5 class="modal-title">Procesos</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel-tag">
+                            Configuración
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Definición</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" ng-model="WFDefinicion.Nombre" class="form-control" placeholder="Definicion" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Proceso principal</div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="tblProcesos as tblProcesos.NombreProcesoExterno for tblProcesos in tablaProcesos"
+                                            ng-model="procesoPadre" ng-change="setProcesoPadre(procesoPadre)" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Order de ejecución</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" ng-model="WFProceso.OrdenEjecucion" class="form-control" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1" ng-model="WFProceso.EjecucionObligatoria" ng-checked="WFProceso.EjecucionObligatoria == 1" parse-int ng-true-value="1" ng-false-value="0" />
+                                        <label class="custom-control-label" for="customSwitch1">Ejecucion obligatoria</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch2" ng-model="WFProceso.ProcesoRepetitivo" ng-checked="WFProceso.ProcesoRepetitivo == 1" parse-int ng-true-value="1" ng-false-value="0" />
+                                        <label class="custom-control-label" for="customSwitch2">Proceso repetitivo</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Cantidad de iteraciones</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProceso.LimiteIteraciones" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-tag">
+                            Vista Interna
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProceso.NombreProcesoInterno" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Descripcion</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProceso.DescripcionProcesoIntarno" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-tag">
+                            Vista Externa
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProceso.NombreProcesoExterno" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Descripcion</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProceso.DescripcionProcesoExterna" placeholder="Nombre" required>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="panel-tag">
+                            Etapas
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="form-group">
+                                <div class="frame-wrap">
+                                    <button type="button" ng-disabled="btnAddEtapa" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="NuevaEtapa()" data-target="#frmEtapas">Agregar etapa</button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Editar</th>
+                                            <th>Nombre</th>
+                                            <th>Descripcion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="tblProcesoEtapa in tablaProcesosEtapas">
+                                            <td align="center">
+                                                <a href='#' data-backdrop="static" ng-click="ValidarTareaEtapa(tblProcesoEtapa, 'Actualizar')" data-keyboard="false" data-toggle="modal" data-target="#frmEtapas" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                            </td>
+                                            <td>{{tblProcesoEtapa.NombreEtapaExterno}}</td>
+                                            <td>{{tblProcesoEtapa.DescripcionEtapaExterna}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-lg-12">
+                            <div class="frame-wrap">
+                                <button type="submit" ng-show="btnGuardarProceso" class="btn btn-primary">Aceptar</button>
+                                <button type="submit" ng-show="btnActualizarProceso" class="btn btn-primary">Aceptar</button>
+                                <button type="button" class="btn btn-primary" ng-click="CancelarProceso()">Cancelar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <form name="mdmFormEtapa" id="mdmFormEtapa" ng-cloak ng-submit="mdmFormEtapa.$valid && ValidarAccionEtapa()">
+        <div class="modal hide fade" id="frmEtapas" style="z-index: 6100;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-primary-500">
+                        <h5 class="modal-title">Etapas</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel-tag">
+                            Configuración
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre</div>
+                                    </div>
+                                    <input type="text" disabled autocomplete="off" class="form-control" ng-model="WFProceso.NombreProcesoExterno" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text  ">Accion</div>
+                                    </div>
+                                    <select class="form-control"
+                                            ng-options="tblAcciones as tblAcciones.NombreAccion for tblAcciones in tablaAcciones"
+                                            ng-model="accion" ng-change="setAccion(accion)" required>
+                                        <option value="">--Seleccione una opción--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1Etapa" ng-model="WFProcesoEtapa.EjecucionObligatoria" ng-checked="WFProcesoEtapa.EjecucionObligatoria == 1" parse-int ng-true-value="1" ng-false-value="0" />
+                                        <label class="custom-control-label" for="customSwitch1Etapa">Ejecucion obligatoria</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-tag">
+                            Vista Interna
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProcesoEtapa.NombreEtapaInterno" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Descripcion</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProcesoEtapa.DescripcionEtapaIntarno" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-tag">
+                            Vista Externa
+                        </div>
+                        <div class="form-row row align-items-center">
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Nombre</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProcesoEtapa.NombreEtapaExterno" placeholder="Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">Descripcion</div>
+                                    </div>
+                                    <input type="text" autocomplete="off" class="form-control" ng-model="WFProcesoEtapa.DescripcionEtapaExterna" placeholder="Nombre" required>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <br />
+                                <div class="frame-wrap">
+                                    <button type="submit" ng-show="btnGuardarEtapa" class="btn btn-primary">Guardar</button>
+                                    <button type="submit" ng-show="btnActualizarEtapa" class="btn btn-primary">Guardar</button>
+                                    <button type="button" class="btn btn-primary" ng-click="CancelarEtapa()">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/WorkFlowController/WFDefinicionController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}
+

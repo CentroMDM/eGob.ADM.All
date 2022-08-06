@@ -1,0 +1,344 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-user'></i> Registro de usuarios
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlUsuario" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="panel-tag">
+                        Filtrar
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Unidad Administrativa</label>
+                                </div>
+                                <select class="form-control" aria-label="small" aria-describedby="label"
+                                        ng-options="Unidad as Unidad.NombreUA for Unidad in UnidadesAdministrativas"
+                                        ng-model="Unidad" ng-change="SetUnidad(Unidad.RIDUnidadAdministrativa)">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-6">
+                            <div class="input-group mb-2">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch3"
+                                           ng-click="selectTodos()" />
+                                    <label class="custom-control-label" for="customSwitch3">Todos</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-tag">
+                        Usuarios
+                    </div>
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Empleado</th>
+                                    <th>Puesto</th>
+                                    <th>Usuario Activo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="emp in usuariosXUnidad">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(emp)" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td>{{emp.NombreEmpleado}}</td>
+                                    <td>{{emp.NombrePuesto}}</td>
+                                    <td>{{emp.Activo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="MostrarListado()"><i class="fal fa-arrow-left"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-tag">
+                Empleados Disponibles
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Unidad Administrativa</div>
+                        </div>
+                        <select id="#OpcionUnidad" class="form-control" aria-label="small" aria-describedby="label"
+                                ng-options="Unidad as Unidad.NombreUA for Unidad in UnidadesAdministrativas"
+                                ng-model="Unidad" ng-change="SetNewUser(Unidad)" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="#NombreEmpleado" class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div  class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre</div>
+                        </div>
+                        <select id="#OpcionEmpleado" class="form-control" aria-label="small" aria-describedby="label"
+                                ng-options="Empleado as Empleado.NombreEmpleado for Empleado in empleadoSeleccionado"
+                                ng-model="Empleado" ng-change="SetEmpleado(Empleado)" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="#PuestoEmpleado" class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Puesto</div>
+                        </div>
+                        <input  type="text" autocomplete="off" id="txtPuestoEmpleado" class="form-control" placeholder="" ng-model="Empleado.NombrePuesto" capitalize disabled>
+                    </div>
+                </div>
+            </div>
+            <div id="#BtnAsignaRol">
+                <div class="panel-tag">
+                    Acceso
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Usuario</div>
+                            </div>
+                            <input type="text" autocomplete="off" id="txtUsuario" ng-model="EmpleadoUsuario.UserID" class="form-control" placeholder="Usuario">    
+                        </div>
+                    </div>
+                    <div id="#txtPassword" class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Password&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input id="pass1" type="password" name="txtPassword" ng-model="EmpleadoUsuario.UserPW" class="form-control" placeholder="Password" pattern="(?=.*[0-9])(?=.*[A-Z])\S{8,}" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text border-left-0" style="min-width: 30px; text-align: center; cursor: pointer;">
+                                    <a ng-click="ShowPw('pass1');"><i id="eye1" class='fal fa-eye'></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="#txtPasswordConfirma" class="col-12 col-lg-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Confirmar password&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                            </div>
+                            <input id="pass2" type="password" name="txtPasswordConfirma" compare-to="EmpleadoUsuario.UserPW" ng-model="EmpleadoUsuario.confirmUserPW" class="form-control" placeholder="Confirmar Password" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text border-left-0" style="min-width: 30px; text-align: center; cursor: pointer;">
+                                    <a ng-click="ShowPw('pass2');"><i id="eye2" class='fal fa-eye'></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="#condicionContrasena" class="col-12 col-lg-8">
+                        <span class="error text-info">
+                            El password debe contener mínimo 8 caracteres, al menos una MAYÚSCULA y al menos un número.
+                        </span>
+                    </div>
+                    <div class="col-12 col-lg-8">
+                        <span class="error text-danger" ng-show="EmpleadoUsuario.UserPW != EmpleadoUsuario.confirmUserPW && EmpleadoUsuario.confirmUserPW != ''">
+                            Los passwords no son idénticos, favor de verificar.
+                        </span>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div align="right">
+                            <div>
+                                <button ng-show="btnCambioPw" type="submit" class="btn btn-primary" ng-click="cambiarContrasena()">Cambiar Contraseña</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-tag">
+                    Firmante
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div><br></div>
+                        <div class="input-group-prepend">
+                            <label><input type="checkbox" id="#Firmante" ng-model="EmpleadoUsuario.Firmante" />Autorizado a Firmar</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <textarea class="form-control" id="#Fundamento" rows="3" ng-model="EmpleadoUsuario.FundamentoFirma" placeholder="Fundamento de Firma" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)"></textarea>
+                    </div>
+                </div>
+                <div class="panel-tag">
+                    Aplicaciones asignadas
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="form-group">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#tabla-buzonesActivos">Agregar Aplicación</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <table id="#dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de la aplicación</th>
+                                    <th>Cantidad de roles asignados</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="BS in RolesFinales">
+                                    <td>
+                                        {{BS.NombreBuzon}}
+                                    </td>
+                                    <td>
+                                        {{BS.RolesAsignados}}
+                                    </td>
+                                    <td align="center">
+                                        <a ng-show="EliminaRoles" ng-click="eliminarRolesAsignados(BS)" data-backdrop="static" data-keyboard="false" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <br />
+                            <div class="frame-wrap">
+                                <button type="submit" ng-show="btnGuardar" class="btn btn-primary" ng-click="GuardarObjetoNegocio()">Guardar</button>
+                                <button type="submit" ng-show="btnActualizar" ng-click="ActualizaObjetoNegocio()" class="btn btn-primary">Actualizar</button>
+                                <button type="button" ng-show="btnHabilitar" ng-click="ReactivarObjetoNegocio()" class="btn btn-primary">Reactivar</button>
+                                <button type="button" ng-show="btnSuspender" ng-click="SupenderObjetoNegocio()" class="btn btn-primary">Dar de baja</button>
+                                <button type="button" ng-show="btnEliminar" ng-click="EliminarObjetoNegocio()" class="btn btn-primary">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal hide fade" id="tabla-buzonesActivos" style="z-index: 6000;">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-white bg-primary-500">
+                            <h5 class="modal-title">Asignación de aplicaciones</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row row align-items-center">
+                                <div id="#Aplicaciones" class="col-12 col-lg-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text  ">Aplicaciones configuradas</div>
+                                        </div>
+                                        <select class="form-control" 
+                                                ng-options="Buzon as Buzon.NombreBuzon for Buzon in aplicacionesConfiguradas"
+                                                ng-model="Buzon" ng-change="SetBuzonConfiguracion(Buzon)">
+                                            <option value="">--Seleccione una opción--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="#Aplicaciones2" class="col-12 col-lg-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text  ">Aplicaciones configuradas</div>
+                                        </div>
+                                        <select class="form-control" id="#Aplicaciones2"
+                                                ng-options="Buzon as Buzon.NombreBuzon for Buzon in aplicacionesConfiguradas"
+                                                ng-model="Buzon" ng-change="SetBuzonConfiguracionUser(Buzon)">
+                                            <option value="">--Seleccione una opción--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-12" id="#MuestraRoles">
+                                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Seleccionar</th>
+                                                <th>Rol disponible</th>
+                                                <th>Descripción de Rol</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="Roles in RolesDisponibles">
+                                                <td align="center">
+                                                    <input type="checkbox"  ng-model="Roles.IDCheck"
+                                                           ng-click="SetUsuarioRolesBuzon(Roles)" />
+                                                </td>
+                                                <td>{{Roles.nombreRol}}</td>
+                                                <td>{{Roles.descripcionRol}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12">
+                                <div class="frame-wrap">
+                                    <button type="button" class="btn btn-primary" ng-click="CerrarBuzon()">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/EstructuraOrganizacional/UsuarioController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}
+
+
+
+

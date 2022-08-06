@@ -1,0 +1,274 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-file-archive'></i> Tipo de documento
+    </h1>
+</div>
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="configTipoDocto" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        @*<a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>*@
+                        <a class="nav-link" href="#">Acciones<span class="sr-only" ng-click="CancelarDocumentos()"></span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th class="no-sort">Editar</th>
+                                    <th>Nombre</th>
+                                    <th>Tamaño Maximo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tblTipoDocumento in tablaTipoDocumento">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(tblTipoDocumento, 'Actualizar')" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    </td>
+                                    <td align="center">{{tblTipoDocumento.NombreDocumento}}</td>
+                                    <td align="center">{{tblTipoDocumento.TamanioMaximoMB}} MB</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="form-row row align-items-center">
+
+                <div class="col-12 col-lg-12">
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Nombre&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" placeholder="Nombre" required ng-model="tipoDocumento.NombreDocumento">
+                    </div>
+
+
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Nombre corto </div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" placeholder="Nombre corto" ng-model="tipoDocumento.NombreCortoDocumento">
+                    </div>
+
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Descripción </div>
+                        </div>
+                        <input type="text" autocomplete="off" class="form-control" placeholder="Descripción" ng-model="tipoDocumento.Descripcion">
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text ">Tamaño máximo para los archivos (MB)&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="number" autocomplete="off" class="form-control" ng-model="tipoDocumento.TamanioMaximoMB" placeholder="Tamaño" min="0.5" step="0.5" required>
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text ">Tipo de Archivo</div>
+                        </div>
+                        <select data-placeholder="Tipo de Archivo" class="form-control" id="listTipoArchivo"
+                                ng-click="GetExtenciones()"
+                                ng-options="'('+lstTipoArchivo.Extencion+')'+lstTipoArchivo.NombreTipoArchivo for lstTipoArchivo in lstTipoArchivo"
+                                ng-model="TipoArchivo"
+                                ng-change="changeTipoArchivo(TipoArchivo)">
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                        <div>
+                            <a href="#" class="btn btn-primary">Asignar</a>
+                        </div>
+
+                    </div>
+                    <div align="right">
+                        <small class="text-muted">
+                            Nuevo tipo de archivo <a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmTipoArchivo">aqui</a>.
+                        </small>
+                    </div>
+
+
+                    <table id="tblTipoArchivo" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th class="not-export-col" data-orderable="false">Eliminar</th>
+                                <th>Tipo de Archivo</th>
+                                <th>Extención</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            <tr ng-repeat="ArchivoExtencion in TblRarchivoExtenciones">
+                                <td>
+                                    <a href='#' ng-click=""
+                                       data-backdrop="static" data-keyboard="false"
+                                       data-toggle="modal"
+                                       data-target="#default-example-modal-lg"
+                                       class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'
+                                       title='Eliminar'>
+                                        <i class='fal fa-trash'></i>
+                                    </a>
+                                    @*{{ArchivoExtencion.RID}}*@
+                                </td>
+                                <td>
+                                    {{ArchivoExtencion.NombreTipoArchivo}}
+                                </td>
+                                <td>
+                                    {{ArchivoExtencion.Extencion}}
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+
+
+
+
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <br />
+                            <div class="frame-wrap">
+                                <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                                <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Actualizar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Modal Tipo Archivo *@
+
+    <div class="modal hide fade" id="frmTipoArchivo" style="z-index: 6100;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Tipo de Archivo</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-tag">
+                        Tipo de Archivo
+                    </div>
+
+
+                    @*
+                        RID
+                        NombreTipoArchivo
+                        NombreCorto
+                        Extencion
+                        TypeMime
+                        FechaInicio
+                        ClaveStatus
+                        FechaStatus
+                        FechaFin
+                    *@
+
+                    <div class="form-row row align-items-center">
+
+
+
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Nombre de Tipo de Archivo *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Tipo de Archivo" ng-required ng-model="tipoArchivo.Nombre">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Nombre Corto *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Nombre Corto" ng-model="tipoArchivo.NombreCorto">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Extención *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Extención (.extencion)" ng-required ng-model="tipoArchivo.Extencion">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Tipo MIME *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Tipo MIME (text/plain - application/octet-stream)" ng-required ng-model="tipoArchivo.TypeMime">
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="submit" class="btn btn-primary" ng-click="NuevoTipoArchivo(tipoArchivo)">Aceptar</button>
+                            <button type="button" class="btn btn-primary" ng-click="CerrarModal()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+
+
+
+
+
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/ConfiguracionCasosController/TipoDocumentoController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

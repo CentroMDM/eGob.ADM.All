@@ -1,0 +1,114 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-list'></i> Catálogo de Niveles de Puesto
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlNivelDeMando" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Nuevo" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Clave</th>
+                                    <th>Nivel del puesto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tabla in tablaView">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(tabla, 'Actualizar')" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    </td>
+                                    <td>{{tabla.Clave}}</td>
+                                    <td>{{tabla.Nombre}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-toggle="tooltip" data-backdrop="static" data-keyboard="false" title="Listar" ng-click="MostrarListado()"><i class="fal fa-arrow-left"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Clave&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtAbreviatura" class="form-control" placeholder="Clave" ng-model="newPuesto.Clave" capitalize onkeydown="return /^[a-zA-Z0-9]/i.test(event.key)" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Nivel del puesto&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtPuesto" class="form-control" placeholder="Nivel del puesto" ng-model="newPuesto.Nombre" onkeydown="return /^[a-zA-Z0-9-á-źÁ-Ź ]/i.test(event.key)" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-12">
+                <div class="input-group mb-2">
+                    <div><br></div>
+                    <div class="input-group-prepend">
+                        <label><input type="checkbox" id="PuestoDeMando" ng-model="newPuesto.PuestoMando" /> Puesto de Mando</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <br />
+                    <div class="frame-wrap">
+                        <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                        <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Guardar</button>
+                        <button type="button" ng-show="btnEliminar" ng-click="EliminarNivel()" class="btn btn-primary">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/EstructuraOrganizacional/NivelesDeMandoController.js"></script>
+}
+

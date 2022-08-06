@@ -1,0 +1,660 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-network-wired'></i> Unidades administrativas
+    </h1>
+</div>
+
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlUnidadAdministrativa" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Nuevo" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="modal" title="Organigrama" ng-click="ViewOrg()" data-target="#tabla-organigrama"><i class="fal fa-sitemap"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Nombre unidad</th>
+                                    <th>Titular</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tabla in tablaView | filter:FiltrarPrincipal">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(tabla, 'Actualizar')" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td>{{tabla.NombreUA}}</td>
+                                    <td>{{tabla.Titular.NombreCompleto}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="tooltip" title="Listado" data-target="#default-example-modal-lg" onclick="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" data-keyboard="false" data-toggle="modal" title="Organigrama" ng-click="ViewOrg()" data-target="#tabla-organigrama"><i class="fal fa-sitemap"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-tag">
+                Unidad administrativa de la que depende.
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group-prepend">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text  ">Unidad administrativa</div>
+                            <select class="form-control" id="unidadesAdministrativasPrincipal"
+                                    ng-options="tablas.RIDUnidadAdministrativa as tablas.NombreUA for tablas in tablaView"
+                                    ng-change="MostrarListadoDependientes(newPuesto.ClaveUAPadre,0)"
+                                    ng-model="newPuesto.ClaveUAPadre" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                            <button type="button" ng-click="MostrarInformacionUnidad(newPuesto.ClaveUAPadre,1)" class="btn btn-default" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#tabla-descripcion-unidades">Ver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel-tag">
+                Datos Generales
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-8">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre unidad</div>
+                        </div>
+                        <input type="text" id="txtPuesto" class="form-control" autocomplete="off" ng-model="newPuesto.NombreUA" placeholder="Nombre de la unidad administrativa" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Abreviatura</div>
+                        </div>
+                        <input type="text" id="txtAbreviatura" class="form-control" autocomplete="off" ng-model="newPuesto.AbreviaturaUA" placeholder="Abreviatura" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Logotipo</div>
+                        </div>
+                        @*INICIO MM <input type="file" id="selectPhoto" style="display: none;" onchange="angular.element(this).scope().uploadedFile(event)">
+                            <input type="text" id="txtPhoto" autocomplete="off" ng-model="newPuesto.DirectorioSecundarioLogo" class="form-control" placeholder="Fotografía" required>
+                            <input type="button" value="Buscar" onclick="document.getElementById('selectPhoto').click();" />*@
+
+                        <input type="file" id="PhotoDatoGeneral" style="display: none;" onchange="angular.element(this).scope().cargaImagenRe(event)">
+                        <input type="text" autocomplete="off" ng-model="UnidadAdministrativaController.Editar" class="form-control" placeholder="Fotografía">
+                        <input type="button" value="Buscar" onclick="document.getElementById('PhotoDatoGeneral').click();" />
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12" ng-show="LogoConfiguracionLogo != null">
+                    <img ng-src="{{LogoConfiguracionLogo}}" alt="" style="height:150px;width:150px" />
+                    <br><br>
+                </div>
+
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Titular</div>
+                        </div>
+                        <div id="s2-container-good">
+                            <select class="form-control status" aria-label="small" aria-describedby="label"
+                                    ng-options="empleado.RIDEmpleado as empleado.NombreCompleto for empleado in Empleados"
+                                    ng-model="newPuesto.ClaveEmpleado" ng-change="MostrarListadoEmpleados(newPuesto.ClaveEmpleado);" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel-tag">
+                Domicilio
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Entidad federativa</div>
+                        </div>
+                        <input type="text" id="txtEntidad" ng-disabled="false" ng-model="newPuesto.Estado" ng-value="newPuesto.Estado = EntidadFederativa.Estado" class="form-control" placeholder="Ciudad o municipio">
+                    </div>
+                </div>
+                @*FIN MM*@
+
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Municipio</div>
+                        </div>
+                        <div id="s2-container-good">
+                            <select class="form-control status" aria-label="small" aria-describedby="label"
+                                    ng-options="municipio.RIDMunicipio as municipio.Municipio for municipio in Municipios"
+                                    ng-model="newPuesto.ClaveMunicipio" ng-change="ObtenerCP(newPuesto.ClaveMunicipio);" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="sr-only" for="inlineFormInputGroup"></label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Código postal</div>
+                        </div>
+                        <div id="s2-container-good">
+                            <select class="form-control status" aria-label="small" aria-describedby="label"
+                                    ng-options="cp.CP as cp.CP for cp in CPS"
+                                    ng-model="newPuesto.CodigoPostal" ng-change="ObtenerColonias(newPuesto.CodigoPostal)" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Colonia</div>
+                        </div>
+                        <div id="s2-container-good">
+                            <select class="form-control status" aria-label="small" aria-describedby="label"
+                                    ng-options="colonia.RIDCP as colonia.NombreAsentamiento for colonia in Colonias"
+                                    ng-model="newPuesto.ClaveCP" required>
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Calle</div>
+                        </div>
+                        <input type="text" id="txtCalle" ng-model="newPuesto.Calle" autocomplete="off" class="form-control" placeholder="Calle" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="sr-only" for="inlineFormInputGroup"></label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Número exterior</div>
+                        </div>
+                        <input type="text" id="txtNumeroExterior" ng-model="newPuesto.NumExt" autocomplete="off" class="form-control" placeholder="Número exterior" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="sr-only" for="inlineFormInputGroup"></label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Número interior </div>
+                        </div>
+                        <input type="text" id="txtNumeroInterior" ng-model="newPuesto.NumInt" autocomplete="off" class="form-control" placeholder="Número interior">
+                    </div>
+                </div>
+            </div>
+            @*MM*@
+            <div ng-show="unidadesHijas">
+                <div class="panel-tag">
+                    Unidades administrativas dependientes
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaDependientes">
+                            <thead>
+                                <tr>
+                                    <th>Nombre unidad</th>
+                                    <th>Titular</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="tablaUD in tablaUnidadesDependientes">
+                                    <td>{{tablaUD.NombreUA}}</td>
+                                    <td>{{tablaUD.NombreTitular}}</td>
+                                    <td align="center">
+                                        <a href='#' ng-click="MostrarInformacionUnidad(tablaUD.RIDUnidadAdministrativa,1)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Ver'><i class='fal fa-eye'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> @*MM*@
+
+            <div class="panel-tag">
+                Aplicación
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="form-group">
+                    <div class="frame-wrap">
+                        @*<button type="button" ng-disabled="btnAddBuzon" class="btn btn-primary" data-toggle="modal" ng-click="NuevoBuzon()" data-backdrop="static" data-keyboard="false" data-target="#frmConfiguracionBuzon">Agregar Aplicación</button>*@
+                        <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="NuevoBuzon()" data-backdrop="static" data-keyboard="false" data-target="#frmConfiguracionBuzon">Agregar Aplicación</button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Nombre buzón</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="buz in buzones">
+                                <td align="center">
+                                    <a href='#' data-toggle="modal" data-backdrop="static" ng-click="CargarBuzon(buz);" data-keyboard="false" data-target="#frmConfiguracionBuzon" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                                <td>{{buz.NombreBuzon}}</td>
+                                <td>{{buz.Descripcion}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel-tag">
+                Empleados
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="form-group">
+                    <div class="frame-wrap">
+                        @*<button type="button" ng-disabled="btnAddEmpleado" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado">Agregar Empleado</button>*@
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado">Agregar Empleado</button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Nombre Empleado</th>
+                                <th>Nombre puesto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="empleado in newPuesto.Empleados">
+                                <td align="center">
+                                    <a href='#' ng-click="EditarEmpleado(empleado)" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmAltaEmpleado" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                                <td>{{empleado.Nombre}} {{empleado.APaterno}} {{empleado.AMaterno}}</td>
+                                <td>{{empleado.PuestoInstitucional.NombrePuesto}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="form-row row align-items-center">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                            <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Guardar</button>
+                            <button type="button" ng-show="btnEliminar" ng-click="EliminarObjetoNegocio()" class="btn btn-primary">Eliminar</button>
+                            <button type="button" ng-click="NuevoObjeto()" class="btn btn-primary">Nuevo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hide fade" id="frmAltaEmpleado" style="z-index: 5800;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Alta de empleados</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Puesto</div>
+                                </div>
+                                <select class="form-control"
+                                        ng-options="puesto.NombrePuesto for puesto in newPuesto.Puestos"
+                                        ng-model="PuestoInstitucional" ng-change="AsignarPuesto(PuestoInstitucional)">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nivel del puesto</div>
+                                </div>
+                                <input type="text" class="form-control" autocomplete="off" ng-disabled="true" ng-model="puestos.NivelPuesto.Nombre">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Número de empleado</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Número de empleado" ng-model="Empleado.NumeroEmpleado">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nombre</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Nombre" ng-model="Empleado.Nombre">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Apellido paterno</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Apellido paterno" ng-model="Empleado.APaterno">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Apellido materno</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Apellido materno" ng-model="Empleado.AMaterno">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Fotografía</div>
+                                </div>
+                                @*<input type="file" id="selectPhotoFotoEmpleado" ng-model="Empleado.PreviewImage" style="display: none;" onchange="angular.element(this).scope().CargarImagenEmpleado(this)">
+                                <input type="text" autocomplete="off" ng-model="Empleado.DirectorioSecundarioFoto" class="form-control" placeholder="Fotografia">
+                                <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoFotoEmpleado').click();" />*@
+
+                                <input type="file" id="selectPhotoFotoEmpleado" ng-model="UnidadAdministrativaController.DirectorioSecundarioFoto" style="display: none;" onchange="angular.element(this).scope().cargaImagenRe2(event)">
+                                <input type="text" autocomplete="off" ng-model="UnidadAdministrativaController.DirectorioSecundarioFoto" class="form-control" placeholder="Fotografía">
+                                <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoFotoEmpleado').click();" />
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12" ng-show="UnidadAdministrativaController.DirectorioSecundarioFoto != null">
+                            <img ng-src="{{UnidadAdministrativaController.DirectorioSecundarioFoto}}" alt="" style="height:150px;width:150px" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" ng-click="AgregarEmpleado()">Aceptar</button>
+                            <button type="button" class="btn btn-primary" ng-click="CancelarEmpleado()">Cancelar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hide fade" id="tabla-organigrama" style="z-index: 5900;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Organigrama de la organización</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="chart-container"></div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hide fade" id="frmConfiguracionBuzon" style="z-index: 6000;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Configuración de la aplicación</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Tipo de aplicación</div>
+                                </div>
+                                <select class="form-control"
+                                        ng-options="apl.RIDAplicacion as apl.NombreAplicacion for apl in aplicaciones"
+                                        ng-model="buzon.ClaveTipoBuzon" ng-change="ValidarIngresarFiltros(buzon.ClaveTipoBuzon)">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Nombre de la aplicación</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" ng-model="buzon.NombreBuzon" placeholder="Nombre buzón">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Descripción</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" ng-model="buzon.Descripcion" placeholder="Descripción">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-7">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Alias</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" ng-model="buzon.AliasBuzon" placeholder="Alias">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Icono</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" ng-model="buzon.IconoFontAsome" placeholder="Icono">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Logotipo</div>
+                                </div>
+                                <input type="file" id="selectPhotoBuzon" style="display: none;" onchange="angular.element(this).scope().uploadedFileBuzon(this)">
+                                <input type="text" autocomplete="off" ng-model="buzon.DirectorioSecundarioLogo" class="form-control" placeholder="Imagen">
+                                <input type="button" value="Buscar" onclick="document.getElementById('selectPhotoBuzon').click();" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12" ng-show="LogoBuzonLogo != null">
+                            <img ng-src="{{LogoBuzonLogo}}" alt="" style="height:150px;width:150px" />
+                            <br><br>
+                        </div>
+                    </div>
+                    <div class="panel-tag">
+                        Filtros
+                    </div>
+                    <div class="form-row row align-items-center">
+                        <div class="form-group">
+                            <div class="frame-wrap">
+                                <button type="button" @*ng-disabled="btnAddFiltro"*@ class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" ng-click="NuevoFiltro()" data-target="#tabla-filtros">Agregar filtro</button>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Eliminar</th>
+                                        <th>Filtro</th>
+                                        <th>Nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="filtro in FiltroBuzon">
+                                        <td align="center">
+                                            <a href='#' ng-click="EliminaFiltro(filtro)" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#frmConfiguracionBuzon2" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                            <div class='dropdown d-inline-block'></div>
+                                        </td>
+                                        <td>{{filtro.Nombre}}</td>
+                                        <td>{{filtro.Display}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" ng-click="ImplementarNuevoBuzon()">Aceptar</button>
+                            <button type="button" class="btn btn-primary" ng-click="CancelarBuzon()">Cancelar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hide fade" id="tabla-filtros" style="z-index: 6100;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Filtros</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row row align-items-center">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text  ">Filtro</div>
+                                </div>
+                                <select class="form-control"
+                                        ng-options="filter.Nombre for filter in Filtros"
+                                        ng-model="filter" ng-change="MostrarFiltro(filter)">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Seleccionar</th>
+                                        <th>Filtro</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="filtroBuzon in FiltrosBuzon">
+                                        <td align="center">
+                                            @*<a href='#' data-backdrop="static" ng-click="AgregarFiltroBuzon(filtroBuzon);" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-check'></i></a>*@
+                                            <a ng-hide="MuestraBoton && filtroBuzon.botonMM ==true" href='#' data-backdrop="static"
+                                               ng-init="AgregarFiltroBoton = false"
+                                               ng-click="AgregarFiltroBuzon(filtroBuzon);"
+                                               ng-mouseover="AgregarFiltroBoton=true"
+                                               ng-mouseleave="AgregarFiltroBoton=false"
+                                               title='Editar'
+                                               class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                                <i ng-show="AgregarFiltroBoton" class='fal fa-check-circle'></i>
+                                                <i ng-hide="AgregarFiltroBoton" class='fal fa-check'></i>
+                                            </a>
+                                            <a href='#' ng-show="MuestraBoton && filtroBuzon.botonMM == true" data-backdrop="static" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'>
+                                             <i class='fal fa-check-circle'></i></a>
+
+                                            @*<a ng-show="MuestraBoton" href='#' data-backdrop="static"
+                                               title='Editar'
+                                               class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
+                                                <i class='fal fa-check-circle' focusable data-focusable-disabled="true"></i>
+                                            </a>*@
+                                            <div class='dropdown d-inline-block'></div>
+                                        </td>
+                                        <td>{{filtroBuzon.Display}}</td>
+                                        <td>{{filtroBuzon.Descripcion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="button" class="btn btn-primary" ng-click="AsignarFiltros()">Aceptar</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/UnidadAdministrativaController.js"></script>
+    <script src="~/Assets/js/Forms/jquery.orgchart.js"></script>
+
+}

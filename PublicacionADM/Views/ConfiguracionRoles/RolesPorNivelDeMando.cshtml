@@ -1,0 +1,289 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-user'></i> Asociación de Niveles de Puesto y Roles
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="RolesPorNivelDeMando" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="#resumen1" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th class="no-sort">Editar</th>
+                                    <th>Clave</th>
+                                    <th>Nivel de Puesto</th>
+                                    <th>Roles Asignados</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="DatosRelacionRXN in RolesXNivel">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(DatosRelacionRXN.RIDNivel)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    </td>
+                                    <td>{{DatosRelacionRXN.Clave}}</td>
+                                    <td>{{DatosRelacionRXN.Nombre}}</td>
+                                    <td>{{DatosRelacionRXN.nombreRol}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="MostrarListado()"><i class="fal fa-arrow-left"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-tag">
+                Asignación de Rol
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nivel de Puesto</div>
+                        </div>
+                        <select id="#NivelPuesto" class="form-control" aria-label="small" aria-describedby="label"
+                                ng-options="Nivel as Nivel.Nombre for Nivel in NivelPuesto"
+                                ng-model="Nivel" ng-change="setNivelPuesto(Nivel.RIDNivel)" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre de Rol</div>
+                        </div>
+                        <select class="form-control" aria-label="small" aria-describedby="label"
+                                ng-options="RolesA as RolesA.nombreRol for RolesA in RolesAsignables"
+                                ng-model="RolesA" ng-change="detallesDeRol(RolesA.RIDRol)" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                        <button type="button" class="btn btn-primary" data-backdrop="static" ng-click="AgregarRol(RolesA.RIDRol)" data-keyboard="false">Agregar Rol</button>
+                    </div>
+                </div>
+            </div>
+            <div id="#ocultaTabla">
+                <div class="panel-tag">
+                    Detalles del Rol
+                </div>
+                <div class="col-12 col-lg-12">
+                    <table id="#resumenModulos" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Módulos</th>
+                                <th>Características</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="DR in detalleDelRol">
+                                <td>
+                                    {{DR.NombreModulo}}
+                                </td>
+                                <td>
+                                    {{DR.NombreCaracteristicas}}
+                                </td>
+                                <td>
+                                    {{DR.NombreAccion}}
+                                </td>
+                                @*<td align="center">
+                                        <a href='#' class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' data-backdrop="static" title='Eliminar'><i class='fal fa-trash'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>*@
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-tag">
+                Roles Agregados
+            </div>
+            <div class="col-12 col-lg-12" id="#tbRolesAgregados1">
+                <table id="#resumenAsignacion" class="table table-bordered table-hover table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th>Eliminar</th>
+                            <th>Aplicación</th>
+                            <th>Nombre del Rol</th>
+                            <th>Descripción del Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="RN in rolesDeNivel">
+                            <td align="center">
+                                <a href='#' ng-click="actualizarRelacionNivelRol(RN.RIDRol, 'Actualizar')" data-backdrop="static" data-keyboard="false" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                @* <a href='#' ng-click="ValidarMotivoDiaInhabil(tablaMotivos)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#frmMotivosCambios" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-trash'></i></a>*@
+                            </td>
+                            <td>
+                                {{RN.nombreAplicacion}}
+                            </td>
+                            <td>
+                                {{RN.nombreRol}}
+                            </td>
+                            <td>
+                                {{RN.descripcionRol}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-lg-12" id="#tbRolesAgregados2">
+                <table id="#resumenAsignacion" class="table table-bordered table-hover table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th>Aplicación</th>
+                            <th>Nombre del Rol</th>
+                            <th>Descripción del Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="RN in rolesDeNivel">
+                            <td>
+                                {{RN.nombreAplicacion}}
+                            </td>
+                            <td>
+                                {{RN.nombreRol}}
+                            </td>
+                            <td>
+                                {{RN.descripcionRol}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @*<div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <div class="form-row row align-items-center">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <br />
+                                    <div class="frame-wrap">
+                                        <button type="submit" class="btn btn-primary" ng-click="GuardarObjetoNegocio()">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+
+    @* Modal Tipo Archivo *@
+
+    <div class="modal hide fade" id="frmAsociacionNivelesRoles" style="z-index: 6100;">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white bg-primary-500">
+                    <h5 class="modal-title">Tipo de Archivo</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-tag">
+                        Tipo de Archivo
+                    </div>
+
+
+                    @*
+                        RID
+                        NombreTipoArchivo
+                        NombreCorto
+                        Extencion
+                        TypeMime
+                        FechaInicio
+                        ClaveStatus
+                        FechaStatus
+                        FechaFin
+                    *@
+
+                    <div class="form-row row align-items-center">
+
+
+
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Nombre de Tipo de Archivo *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Tipo de Archivo" ng-required ng-model="tipoArchivo.Nombre">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Nombre Corto *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Nombre Corto" ng-model="tipoArchivo.NombreCorto">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Extención *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Extención (.extencion)" ng-required ng-model="tipoArchivo.Extencion">
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Tipo MIME *</div>
+                                </div>
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Tipo MIME (text/plain - application/octet-stream)" ng-required ng-model="tipoArchivo.TypeMime">
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <div class="frame-wrap">
+                            <button type="submit" class="btn btn-primary" ng-click="NuevoTipoArchivo(tipoArchivo)">Aceptar</button>
+                            <button type="button" class="btn btn-primary" ng-click="CerrarModal()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/ConfiguracionRoles/RolesPorNivelDeMando.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}

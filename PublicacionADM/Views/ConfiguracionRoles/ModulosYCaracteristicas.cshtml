@@ -1,0 +1,252 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-list'></i> Asociación de Módulos y Roles
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="ModulosYCaracteristicas" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item active">cr
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="panel-tag">
+                        Filtrar
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Aplicación</label>
+                                </div>
+                                <select class="form-control" aria-label="small" aria-describedby="label"
+                                        ng-options="App as App.NombreAplicacion for App in todasLasApps"
+                                        ng-model="App" ng-change="SetApp(App.RIDAplicacion)">
+                                    <option value="">--Seleccione una opción--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend ">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                           ng-click="selectTodosRoles()" />
+                                    <label class="custom-control-label" for="customSwitch1">Todos</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="panel-tag">
+                        Roles
+                    </div>
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th class="no-sort">Editar</th>
+                                    <th>Aplicación</th>
+                                    <th>Nombre del Rol</th>
+                                    <th>Descripción</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="lsRoles in todosLosRoles">
+                                    <td align="center">
+                                        <a href='#' ng-click="editarRaccesoROl(lsRoles)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                    </td>
+                                    <td>{{lsRoles.NombreAplicacion}}</td>
+                                    <td>{{lsRoles.nombreRol}}</td>
+                                    <td>{{lsRoles.descripcionRol}} MB</td>
+                                    <td align="center">
+                                        <a href='#' ng-click="eliminarRolYModulo(lsRoles)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-tag">
+                Datos del Rol
+            </div>
+            <div class="form-row row align-items-center" id="#creacionDeRol">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre de Rol&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <input type="text" autocomplete="off" id="#nombreRol" ng-model="datosDeRol.nombreRol" class="form-control" placeholder="Nombre de Rol" required>
+                    </div>
+                </div>
+                @*<div class="col-12 col-lg-6">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Nivel de Rol</div>
+                            </div>
+                            <input id="#lvlRol" type="number" min="10" max="900" step="10" autocomplete="off" class="form-control" ng-model="datosDeRol.lvlRol" placeholder="Nivel de Rol *" required>
+                        </div>
+                    </div>*@
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Aplicación&nbsp <abbr title="Requerido" class="text-danger">*</abbr></div>
+                        </div>
+                        <select id="#NombreAplicacion" class="form-control" aria-label="small" aria-describedby="label"
+                                ng-options="appsRoles as appsRoles.NombreAplicacion for appsRoles in todasLasApps"
+                                ng-model="appsRoles" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <textarea id="#descripcionRol" class="form-control" rows="3" ng-model="datosDeRol.descripcionRol" placeholder="Descripción de Rol" required></textarea>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div align="right">
+                        <div>
+                            <button ng-show="btnCrear" type="submit" class="btn btn-primary" ng-click="setNewRol()">Crear</button>
+                            <button ng-show="btnActualizar" type="submit" class="btn btn-primary" ng-click="UpdateNewRol()">Actualizar</button>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div id="#accesosDeRol">
+                <div class="panel-tag">
+                    Accesos del Rol
+                </div>
+                <div class="form-row row align-items-center">
+
+                    <div class="col-12 col-lg-12" id="#accesoModulo">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Módulo</div>
+                            </div>
+                            <select class="form-control" aria-label="small" aria-describedby="label"
+                                    ng-options="Modulo as Modulo.NombreModulo for Modulo in catModulos"
+                                    ng-model="Modulo" ng-change="getCat_Caracteristicas(Modulo)">
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12" id="#accesoCaract">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Característica</div>
+                            </div>
+                            <select class="form-control" aria-label="small" aria-describedby="label"
+                                    ng-options="Caract as Caract.NombreCaracteristicas for Caract in getCaracteristicas"
+                                    ng-model="Caract" ng-change="getMenuAcciones(Caract)">
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12" id="#accesoAccion">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text  ">Acción</div>
+                            </div>
+                            <select class="form-control" aria-label="small" aria-describedby="label"
+                                    ng-options="Accion as Accion.NombreAccion for Accion in getAcciones"
+                                    ng-model="Accion">
+                                <option value="">--Seleccione una opción--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <div align="right">
+                            <div>
+                                <button ng-show="btnAgregar" type="submit" class="btn btn-primary" ng-click="setNewAcceso()">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="#accesosDeRol2">
+                <div class="panel-tag">
+                    Accesos Agregados
+                </div>
+                <div class="form-row row align-items-center">
+                    <div class="col-12 col-lg-12">
+                        <table id="tblTipoArchivo" class="table table-bordered table-hover table-striped w-100">
+                            <thead>
+                                <tr>
+                                    <th>Eliminar</th>
+                                    <th>Módulo</th>
+                                    <th>Característica</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody align="center">
+                                <tr ng-repeat="raccesosRol in RAccesosRol">
+                                    <td align="center">
+                                        <a href='#' ng-click="eliminarRaccesoRol(raccesosRol)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#default-example-modal-lg" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Eliminar'><i class='fal fa-trash'></i></a>
+                                    </td>
+                                    <td>
+                                        {{raccesosRol.NombreModulo}}
+                                    </td>
+                                    <td>
+                                        {{raccesosRol.NombreCaracteristicas}}
+                                    </td>
+                                    <td>
+                                        {{raccesosRol.NombreAccion}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/ConfiguracionRoles/ModulosYCaracteristicas.js"></script>
+}

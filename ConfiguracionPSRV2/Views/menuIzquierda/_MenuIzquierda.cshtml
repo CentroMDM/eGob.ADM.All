@@ -1,0 +1,253 @@
+﻿
+@{
+    ViewBag.Title = "_MenuIzquierda";
+    Layout = "~/Views/Shared/_MenuIzquierda.cshtml";
+}
+
+<nav id="js-primary-nav" class="primary-nav" role="navigation"
+     ng-app="AppAdministracion"
+     ng-controller="crtlMenuIzquierda">
+    <div class="nav-filter">
+        <div class="position-relative">
+            <input type="text" id="nav_filter_input" placeholder="Búsqueda" class="form-control" tabindex="0">
+            <a href="#" onclick="return false;" class="btn-primary btn-search-close js-waves-off" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar">
+                <i class="fal fa-chevron-up"></i>
+            </a>
+        </div>
+    </div>
+    <div class="info-card">
+        @*<div class="info-card-text">
+                <a href="#" class="d-flex align-items-center text-white">
+                    <span class="text-truncate text-truncate-sm d-inline-block">
+                        Configuración
+                    </span>
+                </a>
+                <span class="d-inline-block text-truncate text-truncate-sm">de la plataforma</span>
+            </div>*@
+        <img src="~/Assets/img/1080x360.jpg" class="cover" alt="cover">
+        <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
+            <i class="fal fa-angle-down"></i>
+        </a>
+    </div>
+    <ul id="js-nav-menu" class="nav-menu">
+        <li>
+            hola
+        </li>
+        <li>
+            <a href="#" title="Configuración de la plataforma" data-filter-tags="Configuración de la plataforma">
+                @*<i class="fal fa-info-circle"></i>*@
+                <span class="nav-link-text">Configuración</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="~/UnidadAdministrativa/ConfiguracionImplementacion" title="Implementacion" data-filter-tags="Implementacion">
+                        <span class="nav-link-text">Implementación</span>
+                    </a>
+                </li>
+                @*<li>
+                        <a href="~/Agrupador/Agrupador" title="Dias Inhabiles" data-filter-tags="Agrupador">
+                            <span class="nav-link-text">Agrupador(Tags)</span>
+                        </a>
+                    </li>*@
+                <li>
+                    <a href="~/Dias/DiasInhabiles" title="Dias Inhabiles" data-filter-tags="Dias Inhabiles">
+                        <span class="nav-link-text">Días inhábiles</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        @*MM*@
+        <li>
+            <a href="#" title="Buzon Fiscal" data-filter-tags="Buzon Fiscal">
+                <span class="nav-link-text">Buzón Fiscal</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="~/UnidadAdministrativa/ConfiguracionBuzonFiscal" title="Configuracion Buzon Fiscal" data-filter-tags="Configuracion Buzon Fiscal">
+                        <span class="nav-link-text">Configuración</span>
+                    </a>
+                </li>
+                @*<li>
+                        <a href="#" title="Administracion Buzon Fiscal" data-filter-tags="Administracion Buzon Fiscal">
+                            <span class="nav-link-text">Administración</span>
+                        </a>
+                    </li>*@
+            </ul>
+        </li>
+        <li>
+            <a href="~/Agrupador/Agrupador" title="Clasificadores" data-filter-tags="Clasificadores">
+                <span class="nav-link-text">Clasificadores</span>
+            </a>
+            @*<ul>
+                    <li>
+                        <a href="~/Agrupador/Agrupador" title="Clasificadores" data-filter-tags="Agrupador Clasificador">
+                            <span class="nav-link-text">Clasificadores</span>
+                        </a>
+                    </li>
+                </ul>*@
+        </li>
+        @*Fin MM*@
+        <li>
+            <a href="#" title="Estructura Organizacional" data-filter-tags="Estructura Organizacional">
+                <span class="nav-link-text">Estructura Organizacional</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="~/Puestos/NivelPuesto" title="Niveles de Mando" data-filter-tags="Niveles de Mando">
+                        <span class="nav-link-text">Niveles de Mando</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/Puestos/PuestosInstitucionales" title="Puestos Institucionales" data-filter-tags="Puestos Institucionales">
+                        <span class="nav-link-text">Puestos Institucionales</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/UnidadAdministrativa/Empleados" title="Empleados" data-filter-tags="Empleados">
+                        <span class="nav-link-text">Empleados</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/UnidadAdministrativa/UnidadAdministrativa" title="Unidades Administrativas" data-filter-tags="Unidades Administrativas">
+                        <span class="nav-link-text">Unidades Administrativas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/Usuarios/Usuarios" title="Usuarios" data-filter-tags="Usuarios">
+                        <span class="nav-link-text">Usuarios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/Usuarios/GruposAtencion" title="Grupos de Atencion" data-filter-tags="Grupos de Atencion">
+                        <span class="nav-link-text">Grupos de Atención</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" title="Casos" data-filter-tags="Casos">
+                <span class="nav-link-text">Casos</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="~/ConfiguracionCasos/TipoServicios" title="Servicios" data-filter-tags="Servicios">
+                        <span class="nav-link-text">Servicios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/ConfiguracionCasos/TipoDocumento" title="Tipos de Documentos" data-filter-tags="Tipos de Documentos">
+                        <span class="nav-link-text">Tipos de Documentos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/VariablesConfiguracion/VariablesConfiguracion" title="Variables" data-filter-tags="Variables">
+                        <span class="nav-link-text">Variables</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/ConfiguracionCasos/CasoConfiguracionFormatos" title="Formatos" data-filter-tags="Formatos">
+                        <span class="nav-link-text">Formatos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/WorkFlow/Definicion" title="Flujos de Trabajo" data-filter-tags="Flujos de Trabajo">
+                        <span class="nav-link-text">Flujos de Trabajo</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/ConfiguracionCasos/CasoConfiguracion" title="SubCasos" data-filter-tags="SubCasos">
+                        <span class="nav-link-text">Casos</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" title="Administración de la Operacion" data-filter-tags="Administración de la Operacion">
+                <span class="nav-link-text">Administración de la Operación</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="~/Buzon/AdministracionBuzones" title="SubAdministracion" data-filter-tags="SubAdministracion">
+                        <span class="nav-link-text">Administración</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" title="Cumplimiento y Acciones" data-filter-tags="Cumplimiento y Acciones">
+                <span class="nav-link-text">Cumplimiento y Acciones</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="~/CumplimientoAcciones/CatalogoImpuestos" title="Catalogo de Impuestos" data-filter-tags="Catalogo Impuestos">
+                        <span class="nav-link-text">Catálogo de Impuestos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="~/CumplimientoAcciones/CumplimientoSujeto" title="Cumplimiento de Sujeto" data-filter-tags="Cumplimiento de Sujeto">
+                        <span class="nav-link-text">Cumplimiento</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="~/CumplimientoAcciones/AccionesCumplimiento" title="Acciones al Cumplimiento" data-filter-tags="Acciones al Cumplimiento">
+                        <span class="nav-link-text">Acciones al Cumplimiento</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="~/CumplimientoAcciones/ClasificacionSujetos" title="Clasificacion de Sujetos" data-filter-tags="Clasificacion de Sujetos">
+                        <span class="nav-link-text">Clasificación de Sujetos</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" title="Seguridad" data-filter-tags="Seguridad">
+                <span class="nav-link-text">Seguridad</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="~/Seguridad/Auditoria" title="Auditoria" data-filter-tags="Auditoria">
+                        <span class="nav-link-text">Auditoría</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        @*<li>
+                <a href="javascript:void(0);" title="Configuracion de casos" data-filter-tags="Casos">
+                    <span class="nav-link-text" data-i18n="nav.utilities_menu_child">Configuración de variables</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="/VariablesConfiguracion/VariablesConfiguracion" title="VariablesConfiguracion" data-filter-tags="VariablesConfiguracion">
+                            <span class="nav-link-text">Variables</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/VariablesConfiguracion/ConfiguracionFormularios" title="ConfiguracionFomularios" data-filter-tags="Configuracion Formularios">
+                            <span class="nav-link-text">Formularios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/VariablesConfiguracion/Formato" title="ConfiguracioFormato" data-filter-tags="Configuracion Formato">
+                            <span class="nav-link-text">Formato</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/VariablesConfiguracion/FormatoSeccion" title="ConfiguracioFormatoSeccion" data-filter-tags="Configuracion Formato Seccion">
+                            <span class="nav-link-text">Secciones</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>*@
+    </ul>
+    <div class="filter-message js-filter-message bg-success-600"></div>
+
+</nav>
+

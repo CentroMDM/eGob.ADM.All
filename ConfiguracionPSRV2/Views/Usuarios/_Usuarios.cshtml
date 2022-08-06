@@ -1,0 +1,269 @@
+﻿<div class="subheader">
+    <h1 class="subheader-title">
+        <i class='fal fa-list'></i> Catálogo de Usuarios
+    </h1>
+</div>
+
+<form name="mdmForm" id="mdmForm" ng-app="AppAdministracion" ng-cloak ng-controller="crtlUsuario" ng-submit="mdmForm.$valid && ValidarAccion()">
+    <div id="tablaInicial" style="display:block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <p>
+                        <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>Empleado</th>
+                                    <th>Puesto</th>
+                                    <th>Usuario Activo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="emp in Empleados">
+                                    <td align="center">
+                                        <a href='#' ng-click="ValidarTarea(emp, 'Actualizar')" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
+                                        <div class='dropdown d-inline-block'></div>
+                                    </td>
+                                    <td>{{emp.NombreCompleto}}</td>
+                                    <td>{{emp.PuestoInstitucional.NombrePuesto}}</td>
+                                    <td>{{emp.Usuario.EsActivo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="nuevoFormulario" style="display:none">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Acciones<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-backdrop="static" ng-click="MostrarListado()"><i class="fal fa-align-justify"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+            <div class="panel-tag">
+                Empleado
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Nombre</div>
+                        </div>
+                        <select class="form-control" aria-label="small" aria-describedby="label"
+                                ng-options="Empleado as Empleado.NombreCompleto for Empleado in Empleados"
+                                ng-model="Empleado" ng-change="SetEmpleado(Empleado)" required>
+                            <option value="">--Seleccione una opción--</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-tag">
+                Acceso
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Usuario</div>
+                        </div>
+                        <input type="text" autocomplete="off" id="txtUsuario" ng-model="Empleado.Usuario.UserID" class="form-control" placeholder="Usuario" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Password</div>
+                        </div>
+                        <input type="password" name="txtPassword" ng-model="Empleado.Usuario.UserPW" class="form-control" placeholder="Password" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text  ">Confirmar password</div>
+                        </div>
+                        <input type="password" name="txtPasswordConfirma" compare-to="Empleado.Usuario.UserPW" ng-model="Empleado.Usuario.confirmUserPW" class="form-control" placeholder="Password" required>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8">
+                    <span class="error text-danger" ng-show="Empleado.Usuario.UserPW != Empleado.Usuario.confirmUserPW">
+                        Los passwords no son identicos, favor de verificar.
+                    </span>
+                </div>
+            </div>
+
+            <div class="panel-tag">
+                Aplicaciones asignadas
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="form-group">
+                    <div class="frame-wrap">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#tabla-buzonesActivos">Agregar Aplicación</button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th>Nombre de la aplicación</th>
+                                <th>Cantidad Roles Asignados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="Buzon in Usuario.Buzones">
+                                <td align="center">
+                                    <a href='#' class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' ng-click="UpdateBuzon(Buzon)" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#tabla-buzonesActivos" title='Editar'><i class='fal fa-edit'></i></a>
+                                    <div class='dropdown d-inline-block'></div>
+                                </td>
+                                <td>{{Buzon.NombreBuzon}}</td>
+                                <td>{{Buzon.Roles.length}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-tag">
+                Firmante
+            </div>
+            <div class="col-12 col-lg-12">
+                <div class="input-group mb-2">
+                    <div><br></div>
+                    <div class="input-group-prepend">
+                        <label><input type="checkbox" /> Firmante</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-12">
+                <div class="input-group mb-2">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="form-row row align-items-center">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <br />
+                        <div class="frame-wrap">
+                            <button type="submit" ng-show="btnGuardar" class="btn btn-primary">Guardar</button>
+                            <button type="submit" ng-show="btnActualizar" class="btn btn-primary">Actualizar</button>
+                            <button type="button" ng-show="btnEliminar" ng-click="EliminarObjetoNegocio()" class="btn btn-primary">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal hide fade" id="tabla-buzonesActivos" style="z-index: 6000;">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-white bg-primary-500">
+                            <h5 class="modal-title">Asignacion de aplicaciones</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row row align-items-center">
+                                <div class="col-12 col-lg-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text  ">Aplicaciones habilitadas</div>
+                                        </div>
+                                        <select class="form-control"
+                                                ng-options="BuzonConfiguracion.NombreBuzon for BuzonConfiguracion in BuzonesConfiguracion"
+                                                ng-model="Buzon" ng-change="SetBuzonConfiguracion(Buzon)">
+                                            <option value="">--Seleccione una opción--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-12">
+                                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Editar</th>
+                                                <th>Rol asignado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="Rol in Roles.Data">
+                                                <td align="center">
+                                                    <a href='#' class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' ng-click="SetUsuarioRolesBuzon(Rol)" title='Editar'><i class='fal fa-plus-circle'></i></a>
+                                                    <div class='dropdown d-inline-block'></div>
+                                                </td>
+                                                <td>{{Rol.nombreRol}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                Roles Asignados
+                                <div class="col-12 col-lg-12">
+                                    <table id="dt-resumen" class="table table-bordered table-hover table-striped w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Editar</th>
+                                                <th>Rol asignado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="RolAsignado in Buzon.Roles">
+                                                <td align="center">
+                                                    <a href='#' class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' ng-click="EliminarRol(RolAsignado)" title='Editar'><i class='fal fa-times-circle'></i></a>
+                                                    <div class='dropdown d-inline-block'></div>
+                                                </td>
+                                                <td>{{RolAsignado.nombreRol}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12">
+                                <div class="frame-wrap">
+                                    <button type="button" ng-click="AddBuzonRol('tabla-buzonesActivos');" class="btn btn-primary">Aceptar</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Assets/js/App/administracionApp.js"></script>
+    <script src="~/Assets/js/App/AdministracionService.js"></script>
+    <script src="~/Assets/js/App/AppControladores/UsuarioController.js"></script>
+    <script src="~/Assets/js/App/AppControladores/HomeController.js"></script>
+}
+
+
+
+
