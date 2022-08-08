@@ -13,11 +13,12 @@
             if (vm.user.UserID == undefined || vm.user.UserID.length > 13 || vm.user.UserID.length < 12)
                 return Swal.fire({title: "Gobierno Digital", text: "Ingrese un ID válido", icon: "info"});
             if (vm.user.UserPW == undefined || vm.user.UserPW.length != 8) 
-                return Swal.fire({ title: "Gobierno Digital", text: "Ingrese un código válido", icon: "info" });
+                return Swal.fire({ title: "Gobierno Digital", text: "Ingrese un código de verificación válido", icon: "info" });
             vm.user.UserID = vm.user.UserID.toUpperCase();
             vm.user.UserPW = vm.user.UserPW.toUpperCase();
             vm.datosUsuarioBloqueado = administracionServices.MetodPOST(respuesta.busquedaUserID, vm.user);
-            if (vm.datosUsuarioBloqueado.length>0) {
+            if (vm.datosUsuarioBloqueado.length > 0) {
+                vm.datosUsuarioBloqueado = vm.datosUsuarioBloqueado[0];
                 document.getElementById("#datosUsuario").style.display = "block";
                 document.getElementById("#inputUserID").disabled = true;
                 document.getElementById("#inputUserPW").disabled = true;
