@@ -746,11 +746,24 @@ namespace MDM.eGob.ADM.API.Controllers
 
         #region Desbloqueo de cuentas
         [HttpPost]
-        public List<Etusuarios> busquedaUserID([FromBody] string userID)
+        public List<Etusuarios> busquedaUserID([FromBody] Etusuarios userID)
         {
             try
             {
                 return new DesbloqueoDeCuenta().busquedaUserID(userID);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpPost]
+        public Resultado desbloquearUserID([FromBody] Etusuarios userID)
+        {
+            try
+            {
+                return new DesbloqueoDeCuenta().desbloquearUserID(userID);
             }
             catch (Exception e)
             {

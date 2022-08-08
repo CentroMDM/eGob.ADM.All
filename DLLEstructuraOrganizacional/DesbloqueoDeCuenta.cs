@@ -11,11 +11,18 @@ namespace DLLEstructuraOrganizacional
 {
     public class DesbloqueoDeCuenta
     {
-        public List<Etusuarios> busquedaUserID(string userID)
+        public List<Etusuarios> busquedaUserID(Etusuarios userID)
         {
             DatosEO IdUser = new DatosEO();
             DataTable dtIdUser = IdUser.busquedaUserID(userID);
             List<Etusuarios> lsUserID = new Utilerias().Convertir<Etusuarios>(dtIdUser);
+            return lsUserID;
+        }
+        public Resultado desbloquearUserID(Etusuarios userID)
+        {
+            DatosEO IdUser = new DatosEO();
+            DataTable dtIdUser = IdUser.desbloquearUserID(userID);
+            Resultado lsUserID = new Utilerias().ResultadoDesdeTabla(dtIdUser);
             return lsUserID;
         }
     }

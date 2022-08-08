@@ -2439,14 +2439,37 @@ namespace DLLEstructuraOrganizacional
         #endregion
 
         #region Desbloqueo de cuentas
-        public DataTable busquedaUserID(string userID)
+        public DataTable busquedaUserID(Etusuarios userID)
         {
             try
             {
                 if (dataAccess.conn.State == ConnectionState.Closed)
                     dataAccess.OpenConnection();
                 MySqlCommand com = new MySqlCommand("SSP_EOCuentas_GetDatosUsuario", dataAccess.conn);
-                com.Parameters.Add(new MySqlParameter { Value = userID, ParameterName = "_UserID", MySqlDbType = MySqlDbType.VarChar });
+                com.Parameters.Add(new MySqlParameter { Value = userID.UserID, ParameterName = "_UserID", MySqlDbType = MySqlDbType.VarChar });
+                com.Parameters.Add(new MySqlParameter { Value = userID.UserPW, ParameterName = "_IDDesbloqueo", MySqlDbType = MySqlDbType.VarChar });
+                com.CommandType = CommandType.StoredProcedure;
+                MySqlDataAdapter da = new MySqlDataAdapter(com);
+                DataTable dtUsuariosID = new DataTable();
+                da.Fill(dtUsuariosID);
+                dataAccess.CloseConnection();
+                dataAccess.KillConnection();
+                return dtUsuariosID;
+            }
+            catch (Exception Ex)
+            {
+                throw Ex;
+            }
+        }
+        public DataTable desbloquearUserID(Etusuarios userID)
+        {
+            try
+            {
+                if (dataAccess.conn.State == ConnectionState.Closed)
+                    dataAccess.OpenConnection();
+                MySqlCommand com = new MySqlCommand("SSP_EOCuentas_UpdateDatosUsuario", dataAccess.conn);
+                com.Parameters.Add(new MySqlParameter { Value = userID.UserID, ParameterName = "_UserID", MySqlDbType = MySqlDbType.VarChar });
+                com.Parameters.Add(new MySqlParameter { Value = userID.UserPW, ParameterName = "_IDDesbloqueo", MySqlDbType = MySqlDbType.VarChar });
                 com.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(com);
                 DataTable dtUsuariosID = new DataTable();

@@ -120,6 +120,7 @@ const relacionesUBNuevasTablaTemporal = EO + "relacionesUBNuevasTablaTemporal";
         // #endregion
         // #region Desbloqueo de cuentas
 const busquedaUserID = EO + "busquedaUserID";
+const desbloquearUserID = EO + "desbloquearUserID";
         // #endregion
         // #region Grupos de Atención
 const ObtenerBuzon = EO + "ObtenerBuzonesConfiguracion";
@@ -299,6 +300,7 @@ Administracion.Usuarios = {
 Administracion.Cuentas = {
     GetUnidadAdmActiva: GetUnidadAdmActiva, //Herencia Unidades administrativas
     busquedaUserID: busquedaUserID,
+    desbloquearUserID: desbloquearUserID,
 }
         //Grupos de atención
 Administracion.GruposAtencion = {

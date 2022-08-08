@@ -15,9 +15,6 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="#"><span class="sr-only">(current)</span></a>
                     </li>
-                    @*<li class="nav-item active">
-                        <a class="nav-link" href="#" data-backdrop="static" ng-click="NuevoPuesto()"><i class="fal fa-plus"></i></a>
-                    </li>*@
                 </ul>
             </div>
         </nav>
@@ -27,224 +24,40 @@
                     <div class="panel-tag">
                         Búsqueda
                     </div>
-                    @*<div class="row">
-                        <div class="col-12 col-lg-12">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Unidad Administrativa</label>
-                                </div>
-                                <select class="form-control" aria-label="small" aria-describedby="label"
-                                        ng-options="Unidad as Unidad.NombreUA for Unidad in UnidadesAdministrativas"
-                                        ng-model="Unidad" ng-change="SetUnidad(Unidad.RIDUnidadAdministrativa)">
-                                    <option value="">--Seleccione una opción--</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    @*Busqueda de usuario*@
                     <div class="form-row row align-items-center">
                         <div class="col-12 col-lg-6">
                             <div class="input-group mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch3"
-                                           ng-click="selectTodos()" />
-                                    <label class="custom-control-label" for="customSwitch3">Todos</label>
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Usuario ID</label>
                                 </div>
+                                <input id="#inputUserID" type="text" autocomplete="off" class="form-control" placeholder="Ej. AAAA1111AAAA" ng-model="user.UserID" style="text-transform:uppercase" onkeydown="return /^[a-zA-Z0-9]/i.test(event.key)">
                             </div>
                         </div>
-                    </div>*@
-                    @*Botones*@
-                    <!--<div class="form-row row align-items-center">-->
-                        @*USERID*@
-                        <!--<div class="col-12 col-lg-3">
-                            <div class="input-group mb-2">
-                                <div class="custom-control custom-switch">
-                                    <label class="form-check-label">
-                                        <a ng-hide="customSwitch1==true" data-backdrop="static"
-                                           ng-click="selectUserID()"
-                                           ng-mouseleave="checkBtn=false"
-                                           title='Seleccionar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn" class='fal fa-check'></i>
-                                            <i ng-hide="checkBtn" class='fal fa'></i>
-                                        </a>
-                                        <a ng-show="customSwitch1==true" data-backdrop="static"
-                                           ng-click="selectUserID()"
-                                           ng-mouseleave="checkBtn=false"
-                                           title='Quitar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn" class='fal fa'></i>
-                                            <i ng-hide="checkBtn" class='fal fa-check'></i>
-                                        </a>
-                                        Usuario ID
-                                    </label>
-                                </div>
-                            </div>
-                        </div>-->
-                        @*EMPLEADO*@
-                        <!--<div class="col-12 col-lg-3">
-                            <div class="input-group mb-2">
-                                <div class="custom-control custom-switch">
-                                    <label class="form-check-label">
-                                        <a ng-hide="customSwitch2==true" data-backdrop="static"
-                                           ng-click="selectEmpleado()"
-                                           ng-mouseleave="checkBtn2=false"
-                                           title='Seleccionar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn2" class='fal fa-check'></i>
-                                            <i ng-hide="checkBtn2" class='fal fa'></i>
-                                            <input type="checkbox" class="custom-control-input btn-icon" id="customSwitch2" />
-                                        </a>
-                                        <a ng-show="customSwitch2==true" data-backdrop="static"
-                                           ng-click="selectEmpleado()"
-                                           ng-mouseleave="checkBtn2=false"
-                                           title='Quitar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn2" class='fal fa'></i>
-                                            <i ng-hide="checkBtn2" class='fal fa-check'></i>
-                                        </a>
-                                        Empleado
-                                    </label>
-                                </div>
-                            </div>
-                        </div>-->
-                        @*UNIDAD-ADM*@
-                        <!--<div class="col-12 col-lg-3">
-                            <div class="input-group mb-2">
-                                <div class="custom-control custom-switch">
-                                    <label class="form-check-label">
-                                        <a ng-hide="customSwitch3==true" data-backdrop="static"
-                                           ng-click="selectUnidad()"
-                                           ng-mouseleave="checkBtn3=false"
-                                           title='Seleccionar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn3" class='fal fa-check'></i>
-                                            <i ng-hide="checkBtn3" class='fal fa'></i>
-                                            <input type="checkbox" class="custom-control-input btn-icon" id="customSwitch3" />
-                                        </a>
-                                        <a ng-show="customSwitch3==true" data-backdrop="static"
-                                           ng-click="selectUnidad()"
-                                           ng-mouseleave="checkBtn3=false"
-                                           title='Quitar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn3" class='fal fa'></i>
-                                            <i ng-hide="checkBtn3" class='fal fa-check'></i>
-                                        </a>
-                                        Unidad y puesto
-                                    </label>
-                                </div>
-                            </div>
-                        </div>-->
-                        @*TODOS*@
-                        <!--<div class="col-12 col-lg-3">
-                            <div class="input-group mb-2">
-                                <div class="custom-control custom-switch">                                    
-                                    <label class="form-check-label">
-                                        <a ng-hide="customSwitch4==true" data-backdrop="static"
-                                           ng-click="selectAll()"
-                                           ng-mouseleave="checkBtn4=false"
-                                           title='Seleccionar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn4" class='fal fa-check'></i>
-                                            <i ng-hide="checkBtn4" class='fal fa'></i>
-                                            <input type="checkbox" class="custom-control-input btn-icon" id="customSwitch3" />
-                                        </a>
-                                        <a ng-show="customSwitch4==true" data-backdrop="static"
-                                           ng-click="selectAll()"
-                                           ng-mouseleave="checkBtn4=false"
-                                           title='Quitar'
-                                           class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1'>
-                                            <i ng-show="checkBtn4" class='fal fa'></i>
-                                            <i ng-hide="checkBtn4" class='fal fa-check'></i>
-                                        </a>
-                                        Todos
-                                    </label>
-                                </div>
-                            </div>
-                        </div>                        
-                    </div>-->
-                    @*Filtro por usuario*@
-                    <div class="form-row row align-items-center">
-                        <div class="col-12 col-lg-12" id="#select1">
+                        <div class="col-12 col-lg-6">
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
                                     <label class="input-group-text" for="inputGroupSelect01">Código de verificación</label>
                                 </div>
-                                <input type="text" autocomplete="off" class="form-control" placeholder="Ej. A1B2C3D4" ng-model="UserID" style="text-transform:uppercase" onkeydown="return /^[a-zA-Z0-9]/i.test(event.key)">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="buscarUserID(UserID)" data-backdrop="static" data-keyboard="false" data-target="#frmPuestos">Buscar</button>
+                                <input id="#inputUserPW" type="text" autocomplete="off" class="form-control" placeholder="Ej. A1B2C3D4" ng-model="user.UserPW" style="text-transform:uppercase" onkeydown="return /^[a-zA-Z0-9]/i.test(event.key)">
+                                <button style="margin-left: 10px" type="button" class="btn btn-primary" data-toggle="modal" ng-click="buscarUser()" data-backdrop="static" data-keyboard="false" data-target="#frmPuestos">Buscar</button>
                             </div>
                         </div>
-                    </div>                    
-                    @*Filtro por empleado*@
-                    <!--<div class="form-row row align-items-center" >
-                        <div class="col-12 col-lg-12" id="#select2">
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Empleado</label>
-                                </div>
-                                <select class="form-control" aria-label="small" aria-describedby="label"
-                                        ng-options="Unidad as Unidad.NombreUA for Unidad in UnidadesAdministrativas"
-                                        ng-model="Unidad" ng-change="SetUnidad(Unidad.RIDUnidadAdministrativa)">
-                                    <option value="">--Seleccione una opción--</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>-->
-                    @*Filtros por unidad y puesto*@
-                    <!--<div class="form-row row align-items-center">
-                        <div class="col-12 col-lg-12" id="#select3">
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Unidad Administrativa</label>
-                                </div>
-                                <select class="form-control" aria-label="small" aria-describedby="label"
-                                        ng-options="Unidad as Unidad.NombreUA for Unidad in UnidadesAdministrativas"
-                                        ng-model="Unidad" ng-change="SetUnidad(Unidad.RIDUnidadAdministrativa)">
-                                    <option value="">--Seleccione una opción--</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-12" id="#select4">
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Puesto</label>
-                                </div>
-                                <select class="form-control" aria-label="small" aria-describedby="label"
-                                        ng-options="Unidad as Unidad.NombreUA for Unidad in UnidadesAdministrativas"
-                                        ng-model="Unidad" ng-change="SetUnidad(Unidad.RIDUnidadAdministrativa)">
-                                    <option value="">--Seleccione una opción--</option>
-                                </select>
-                            </div>
-                        </div>                    
-                    </div>-->
+                    </div>
                     <br />
-                    <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
+                    @*Datos de usuario*@
+                    <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g" id="#datosUsuario">
                         <div class="panel-container show">
                             <div class="panel-content">
-
                                 <div class="panel-tag">
                                     Usuario
                                 </div>
-                                <p>
-                                    @*<table id="dt-resumen" class="table table-bordered table-hover table-striped w-100 tablaPSRPrincipal">
-                            <thead>
-                                <tr>
-                                    <th>Editar</th>
-                                    <th>Usuario</th>
-                                    <th>Usuario Bloqueado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="nameUsuario in listaDeUsuarios">
-                                    <td align="center">
-                                        <a href='#' ng-click="ValidarTarea(emp)" class='btn btn-sm btn-outline-primary btn-icon btn-inline-block mr-1' title='Editar'><i class='fal fa-edit'></i></a>
-                                        <div class='dropdown d-inline-block'></div>
-                                    </td>
-                                    <td>{{nameUsuario.NombreEmpleado}}</td>
-                                    <td>{{nameUsuario.Activo}}</td>
-                                </tr>
-                            </tbody>
-                        </table>*@
-                                </p>
+                                <div align="right">
+                                    <div>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="desbloquearCuenta()" data-backdrop="static" data-keyboard="false" data-target="#frmPuestos">Desbloquear</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="cancelarDesbloqueo()" data-backdrop="static" data-keyboard="false" data-target="#frmPuestos">Cancelar</button>
+                                    </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
