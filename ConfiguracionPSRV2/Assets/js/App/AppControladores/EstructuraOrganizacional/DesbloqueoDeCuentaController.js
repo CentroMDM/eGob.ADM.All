@@ -37,8 +37,11 @@
                     confirmButtonText: "Si"
                 }).then(seleccion => {
                     if (seleccion.value) {
+                        vm.user.FechaInicio = vm.datosUsuarioBloqueado.FechaInicio;
+                        vm.user.IPCliente = vm.datosUsuarioBloqueado.IPCliente;
                         var result = administracionServices.MetodPOST(respuesta.desbloquearUserID, vm.user);
                         if (!result.ExisteError) {
+
                             MensajeRegresoServidor(result, "success");
                         } else {
                             MensajeRegresoServidor(result, "error");

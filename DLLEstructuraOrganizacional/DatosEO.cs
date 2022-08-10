@@ -2469,7 +2469,8 @@ namespace DLLEstructuraOrganizacional
                     dataAccess.OpenConnection();
                 MySqlCommand com = new MySqlCommand("SSP_EOCuentas_UpdateDatosUsuario", dataAccess.conn);
                 com.Parameters.Add(new MySqlParameter { Value = userID.UserID, ParameterName = "_UserID", MySqlDbType = MySqlDbType.VarChar });
-                com.Parameters.Add(new MySqlParameter { Value = userID.UserPW, ParameterName = "_IDDesbloqueo", MySqlDbType = MySqlDbType.VarChar });
+                com.Parameters.Add(new MySqlParameter { Value = userID.IPCliente, ParameterName = "_IPCliente", MySqlDbType = MySqlDbType.VarChar });
+                com.Parameters.Add(new MySqlParameter { Value = userID.FechaInicio.ToString("yyyy-MM-dd HH:mm:ss"), ParameterName = "_FechaInicio", MySqlDbType = MySqlDbType.VarChar });
                 com.CommandType = CommandType.StoredProcedure;
                 MySqlDataAdapter da = new MySqlDataAdapter(com);
                 DataTable dtUsuariosID = new DataTable();
