@@ -39,12 +39,13 @@
                     if (seleccion.value) {
                         vm.user.FechaInicio = vm.datosUsuarioBloqueado.FechaInicio;
                         vm.user.IPCliente = vm.datosUsuarioBloqueado.IPCliente;
+                        vm.user.CorreoUsuario = vm.datosUsuarioBloqueado.CorreoUsuario;
                         var result = administracionServices.MetodPOST(respuesta.desbloquearUserID, vm.user);
                         if (!result.ExisteError) {
-
-                            MensajeRegresoServidor(result, "success");
+                            var envioConfirmacion = administracionServices.MetodPOST(respuesta.confirmacionMail, vm.user);
+                            return MensajeRegresoServidor(result, "success");
                         } else {
-                            MensajeRegresoServidor(result, "error");
+                            return MensajeRegresoServidor(result, "error");
                         }
                     }
                 }

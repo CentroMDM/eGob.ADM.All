@@ -770,6 +770,19 @@ namespace MDM.eGob.ADM.API.Controllers
                 throw e;
             }
         }
+
+        [HttpPost]
+        public bool confirmacionMail([FromBody] Etusuarios userID)
+        {
+            try
+            {
+                return new DesbloqueoDeCuenta().confirmacionMail(userID);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         #endregion
 
         #region Buzones-Aplicaciones

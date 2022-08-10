@@ -8,6 +8,7 @@ using System.Net.Http;
 using EntitiesPSR;
 using DLLUtilerias;
 using System.Data;
+using System.Net.Mail;
 
 namespace DLLEstructuraOrganizacional
 {
@@ -27,146 +28,111 @@ namespace DLLEstructuraOrganizacional
             Resultado lsUserID = new Utilerias().ResultadoDesdeTabla(dtIdUser);
             return lsUserID;
         }
-        //public Resultado confirmacionMail(Etusuarios userID)
-        //{
-        //    System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
-        //    string body = String.Empty;
-        //    body = @"<!DOCTYPE html><html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" /></head><body><br/>---------- Mensaje reenviado ----------<br/>"
-        //        + @"<b>De:&nbsp;</b>  Sistema de seguimiento de aclaraciones y trámites &lt;" + Origin.myMail + "&gt;<br/>"
-        //        + @"<b>Fecha:&nbsp;</b>"
-        //        + @"<b>Asunto:&nbsp;</b>" + "Asunto" + "<br/>"
-        //        + @"<b>Para:&nbsp;</b>" + "krys.tresen@gmail.com" + "<br/><br/>"
-        //        + @"<blockquote style=""margin-left: 1em; padding-left: 1em; "">"
-        //        + @"</blockquote>
-        //        </body>
-        //        </html>";
+        public bool confirmacionMail(Etusuarios userID)
+        {
+            MailMessage msg = new MailMessage();
+            string body = String.Empty;
+            body = @"<table role='presentation' style='width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;'>
+                        <tr>
+                            <td align='center' style='padding:0;'>
+                                <table role='presentation'
+                                    style='width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;'>
+                                    <tr>
+                                        <td align='center' style='padding:00px 0 0px 0;background:#ffffff;'> 
+                                            <img
+                                                src='https://edomex.e-gob.app/ExResources/Plantillas/Web/r2sp52st12nt3d1d/3m1g2n/h1.svg'
+                                                alt='' width='550' style='height:auto;display:block;' /></td>
+                                    </tr>
+                                    <tr>
+                                        <td style='padding:0px 30px 42px 30px;'>
+                                            <table role='presentation'
+                                                style='width:100%;border-collapse:collapse;border:0;border-spacing:0;'>
+                                                <tr>
+                                                    <td style='padding:0 0 36px 0;color:#153643;'>
+                                                        <h1 style='font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;'>Cuenta Desbloqueada | Gobierno Digital</h1>
+                                                        <p style='margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;'> Estimado usuario,</p>
+                                                        <p style='margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;'><strong> Su cuenta ha sido desbloqueada de manera exitosa.</strong></p>
+                                                        <p style='margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;'>Si usted desconoce esta actividad, informe a su administrador de sistemas o a su jefe inmediato.</p>
+                                                    </td>
+                                                </tr>                            
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style='padding:30px;background:#64656A;'>
+                                            <table role='presentation'
+                                                style='width:100%;border-collapse:collapse;border:0;border-spacing:0;font-size:9px;font-family:Arial,sans-serif;'>
+                                                <tr>
+                                                    <td style='padding:0;width:50%;' align='left'>
+                                                        <p
+                                                            style='margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;'>
+                                                            Gobierno del Estado de México</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>";
+            msg.SubjectEncoding = Encoding.UTF8;
+            msg.BodyEncoding = Encoding.UTF8;
+            msg.IsBodyHtml = true;
 
+            try  //FW mail
+            {
+                SmtpClient cliente = new SmtpClient();
+                cliente.UseDefaultCredentials = false;
+                cliente.Host = Origin.smtpSrv;
+                cliente.Port = Origin.smtpPort;
+                cliente.EnableSsl = true;
+                cliente.Credentials = new NetworkCredential(Origin.myMail, Origin.myPw);
+                msg.From = new MailAddress("Sistema de verificación de accesos "+Origin.myMail);
+                msg.To.Add(new MailAddress(userID.CorreoUsuario));
+                msg.Subject = "Sistema de Acceso | Cuenta Desbloqueada";
+                msg.Body = body;
+                bool send = false;
+                try
+                {
+                    cliente.Send(msg);
+                }
+                catch (SmtpFailedRecipientsException ex)
+                {
+                    for (int i = 0; i < ex.InnerExceptions.Length; i++)
+                    {
+                        SmtpStatusCode status = ex.InnerExceptions[i].StatusCode;
+                        if (status == SmtpStatusCode.MailboxBusy ||
+                            status == SmtpStatusCode.MailboxUnavailable)
+                        {
+                            Console.WriteLine("Delivery failed - retrying in 5 seconds.");
+                            System.Threading.Thread.Sleep(5000);
+                            cliente.Send(msg);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Failed to deliver message to {0}",
+                                ex.InnerExceptions[i].FailedRecipient);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception caught in RetryIfBusy(): {0}",
+                            ex.ToString());
+                }
+                finally
+                {
+                    cliente.Dispose();
+                }
+                return send;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
-        //    var mailMessage = new System.Net.Mail.MailMessage();
-        //    {
-        //        From = new MailAddress("email"),
-        //        Subject = "subject",
-        //        Body = "<h1>Hello</h1>",
-        //        IsBodyHtml = true,
-        //    };
-        //    mailMessage.To.Add("recipient");
-
-        //    smtpClient.Send(mailMessage);
-
-        //}
-
-        //public class Reenvio
-        //{
-            
-            
-        //    public bool FwRespuestas(FordwardMailParam NuevoDestinatario)
-        //    {
-        //        ReenviosEmailNotificacion p = new DataFordwardMail().ObtenerDatosRespuesta(NuevoDestinatario.UID);
-        //        System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
-        //        string body = String.Empty;
-        //        var Fecha = p.Date.ToString("dddd, dd MMMM yyy a la(&#115;)  HH:mm:ss");
-
-        //        body = @"<!DOCTYPE html><html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" /></head><body><br/>---------- Mensaje reenviado ----------<br/>"
-        //            + @"<b>De:&nbsp;</b>  Sistema de seguimiento de aclaraciones y trámites &lt;" + Origin.myMail + "&gt;<br/>"
-        //            + @"<b>Fecha:&nbsp;</b>" +
-        //            //Original.Date.ToShortDateString()
-        //            Fecha + "<br/>"
-        //            + @"<b>Asunto:&nbsp;</b>" + p.Asunto + "<br/>"
-        //            + @"<b>Para:&nbsp;</b>" + p.Email + "<br/><br/>"
-        //            + @"<blockquote style=""margin-left: 1em; padding-left: 1em; "">"
-        //            + p.HtmlRespuesta
-        //            + @"</blockquote>
-        //        </body>
-        //        </html>";
-
-        //        //AQUI AGREGAR ADJUNTOS
-        //        //if (p.ListAttachments.Count > 0)
-        //        //{
-        //        //    foreach (Archivos A in p.ListAttachments)
-        //        //    {
-        //        //        msg.Attachments.Add(new System.Net.Mail.Attachment(A.DirectorioFisicoInterno + A.NombreAdjunto));
-        //        //    }
-        //        //}
-
-        //        msg.SubjectEncoding = System.Text.Encoding.UTF8;
-        //        msg.BodyEncoding = System.Text.Encoding.UTF8;
-        //        msg.IsBodyHtml = true;
-
-        //        try  //FW mail
-        //        {
-        //            System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
-        //            cliente.UseDefaultCredentials = false;
-        //            cliente.Host = Origin.smtpSrv;
-        //            cliente.Port = Origin.smtpPort;
-        //            cliente.EnableSsl = true;
-        //            cliente.Credentials = new System.Net.NetworkCredential(Origin.myMail, Origin.myPw);
-        //            msg.From = new System.Net.Mail.MailAddress(Origin.myMail);
-        //            msg.To.Add(new System.Net.Mail.MailAddress(NuevoDestinatario.NewEmail));
-        //            msg.Subject = "RE: " + p.Asunto;
-        //            msg.Body = body;
-        //            bool send = false;
-        //            try
-        //            {
-        //                cliente.Send(msg);
-        //            }
-        //            catch (SmtpFailedRecipientsException ex)
-        //            {
-        //                for (int i = 0; i < ex.InnerExceptions.Length; i++)
-        //                {
-        //                    SmtpStatusCode status = ex.InnerExceptions[i].StatusCode;
-        //                    if (status == SmtpStatusCode.MailboxBusy ||
-        //                        status == SmtpStatusCode.MailboxUnavailable)
-        //                    {
-        //                        Console.WriteLine("Delivery failed - retrying in 5 seconds.");
-        //                        System.Threading.Thread.Sleep(5000);
-        //                        cliente.Send(msg);
-        //                    }
-        //                    else
-        //                    {
-        //                        Console.WriteLine("Failed to deliver message to {0}",
-        //                            ex.InnerExceptions[i].FailedRecipient);
-        //                    }
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                Console.WriteLine("Exception caught in RetryIfBusy(): {0}",
-        //                        ex.ToString());
-        //            }
-        //            finally
-        //            {
-        //                cliente.Dispose();
-        //                new DataFordwardMail().LogReenvio(NuevoDestinatario);
-        //                RegistrarPista(NuevoDestinatario);
-        //            }
-        //            return send;
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            throw e;
-        //        }
-        //    }
-
-
-        //    public int RegistrarPista(FordwardMailParam Fwd)
-        //    {
-        //        List<ModelAuditoria> listCambios = new List<ModelAuditoria>();
-        //        ModelAuditoria EnvioRespuesta = new ModelAuditoria();
-        //        EnvioRespuesta.ClaveAplicacion = Fwd.ClaveAplicacion;//Buzon
-        //        EnvioRespuesta.ClaveUsuario = Fwd.ClaveUsuario;
-        //        EnvioRespuesta.ClaveTipoObjeto = 26;
-        //        EnvioRespuesta.ClaveObjeto = 1;
-        //        EnvioRespuesta.Accion = Accion.Alta;
-
-        //        EnvioRespuesta.Modificaciones.Add("ClaveRespuesta", Fwd.UID.ToString());
-        //        EnvioRespuesta.Modificaciones.Add("Email", Fwd.NewEmail.ToString());
-        //        listCambios.Add(EnvioRespuesta);
-
-        //        return CtrlAuditoria.RegistrarEvento(listCambios);
-        //    }
-
-        //}
-        
+        }        
     }
     static class Origin
     {
