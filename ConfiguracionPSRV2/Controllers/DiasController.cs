@@ -56,52 +56,52 @@ namespace ConfiguracionPSRV2.Controllers
             return lsResultado;
         }
         #region Motivo Dias Inhabiles
-        public JsonResult GetMotivoDiasInhabil()
-        {
-            List<EcatmotivoDiasInhabiles> resultado = GetBTL().GetMotivoDiasInhabil();
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult SetMotivoDiasInhabil(EcatmotivoDiasInhabiles objetoNegocio)
-        {
-            Resultado resultado = GetBTL().SetMotivoDiasInhabil(objetoNegocio);
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult GetMotivoDiasInhabil()
+        //{
+        //    List<EcatmotivoDiasInhabiles> resultado = GetBTL().GetMotivoDiasInhabil();
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
+        //public ActionResult SetMotivoDiasInhabil(EcatmotivoDiasInhabiles objetoNegocio)
+        //{
+        //    Resultado resultado = GetBTL().SetMotivoDiasInhabil(objetoNegocio);
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
 
-        public ActionResult UpdateMotivoDiasInhabil(EcatmotivoDiasInhabiles objetoNegocio)
-        {
-            Resultado resultado = GetBTL().UpdateMotivoDiasInhabil(objetoNegocio);
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
+        //public ActionResult UpdateMotivoDiasInhabil(EcatmotivoDiasInhabiles objetoNegocio)
+        //{
+        //    Resultado resultado = GetBTL().UpdateMotivoDiasInhabil(objetoNegocio);
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
         #endregion
 
         #region cat dias inhabiles
         
-        public JsonResult GetDescriptivoItems()
-        {
-            List<Ecatdescriptivoitems> resultado = GetBTL().GetDescriptivoItems();
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult GetCatDiasInhabiles()
-        {
-            List<EcatdiasInhabiles> resultado = GetBTL().GetCatDiasInhabiles();
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult SetCatDiasInhabiles(EcatdiasInhabiles objetoNegocio)
-        {
-            Resultado resultado = GetBTL().SetCatDiasInhabiles(objetoNegocio);
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult GetDescriptivoItems()
+        //{
+        //    List<Ecatdescriptivoitems> resultado = GetBTL().GetDescriptivoItems();
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
+        //public JsonResult GetCatDiasInhabiles()
+        //{
+        //    List<EcatdiasInhabiles> resultado = GetBTL().GetCatDiasInhabiles();
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
+        //public ActionResult SetCatDiasInhabiles(EcatdiasInhabiles objetoNegocio)
+        //{
+        //    Resultado resultado = GetBTL().SetCatDiasInhabiles(objetoNegocio);
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
 
-        public ActionResult UpdateCatDiasInhabiles(EcatdiasInhabiles objetoNegocio)
-        {
-            Resultado resultado = GetBTL().UpdateCatDiasInhabiles(objetoNegocio);
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult DeleteCatDiasInhabiles(EcatdiasInhabiles objetoNegocio)
-        {
-            Resultado resultado = GetBTL().DeleteCatDiasInhabiles(objetoNegocio);
-            return Json(resultado, JsonRequestBehavior.AllowGet);
-        }
+        //public ActionResult UpdateCatDiasInhabiles(EcatdiasInhabiles objetoNegocio)
+        //{
+        //    Resultado resultado = GetBTL().UpdateCatDiasInhabiles(objetoNegocio);
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
+        //public ActionResult DeleteCatDiasInhabiles(EcatdiasInhabiles objetoNegocio)
+        //{
+        //    Resultado resultado = GetBTL().DeleteCatDiasInhabiles(objetoNegocio);
+        //    return Json(resultado, JsonRequestBehavior.AllowGet);
+        //}
         #endregion
 
     }

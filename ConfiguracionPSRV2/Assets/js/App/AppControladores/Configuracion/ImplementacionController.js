@@ -223,7 +223,7 @@
 
                         if (vm.Implementacion.RIDImplementacion == 0) {
                             vm.Implementacion.ClaveDirectorioLogoImplementacion = 201;
-                            vm.Implementacion.RIDImplementacion = 200000000005;
+                            vm.Implementacion.RIDImplementacion = 200000000001;
                             var result = administracionServices.MetodPOST(rutas.Setimplementacion, vm.Implementacion);
                             if (!result.ExisteError) {
                                 Swal.fire({

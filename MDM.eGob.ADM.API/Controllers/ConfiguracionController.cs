@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using EntitiesPSR;
 using DLLImplementacion;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web;
+using BTLConfiguracionPSRV2;
 
 namespace MDM.eGob.ADM.API.Controllers
 {
     [Authorize]
-    public class ImplementacionController : ApiController
+    public class ConfiguracionController : ApiController
     {
+        #region Implementacion
         [HttpPost]
         public Etimplementacion GetImplementacion()
         {
@@ -25,7 +24,7 @@ namespace MDM.eGob.ADM.API.Controllers
                 throw e;
             }
         }
-        
+
         [HttpPost]
         public List<EcatcpEntidadesFederativas> GetImpEntidadesFederativas()
         {
@@ -38,7 +37,7 @@ namespace MDM.eGob.ADM.API.Controllers
                 throw e;
             }
         }
-        
+
         [HttpPost]
         public List<Ecatcpmunicipios> GetImpMunicipios([FromBody] EcatcpEntidadesFederativas entidades)
         {
@@ -51,7 +50,7 @@ namespace MDM.eGob.ADM.API.Controllers
                 throw e;
             }
         }
-        
+
         [HttpPost]
         public List<Ecatcp> ObtenerCodigoPostalMunicipio([FromBody] int municipio)
         {
@@ -111,7 +110,7 @@ namespace MDM.eGob.ADM.API.Controllers
                 throw e;
             }
         }
-        
+
         [HttpPost]
         public Resultado Updatetimplementacion([FromBody] Etimplementacion implementacion)
         {
@@ -124,5 +123,114 @@ namespace MDM.eGob.ADM.API.Controllers
                 throw e;
             }
         }
+        #endregion
+
+        #region Días Inhábiles
+        [HttpPost]
+        public List<Ecatdescriptivoitems> GetDescriptivoItems()
+        {
+            try
+            {
+                return new BTLDias().GetDescriptivoItems();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpPost]
+        public List<EcatdiasInhabiles> GetCatDiasInhabiles()
+        {
+            try
+            {
+                return new BTLDias().GetCatDiasInhabiles();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
+        [HttpPost]
+        public Resultado DeleteCatDiasInhabiles(EcatdiasInhabiles catDiasInhabiles)
+        {
+            try
+            {
+                return new BTLDias().DeleteCatDiasInhabiles(catDiasInhabiles);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
+        [HttpPost]
+        public Resultado SetCatDiasInhabiles(EcatdiasInhabiles catDiasInhabiles)
+        {
+            try
+            {
+                return new BTLDias().SetCatDiasInhabiles(catDiasInhabiles);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
+        [HttpPost]
+        public Resultado UpdateCatDiasInhabiles(EcatdiasInhabiles catDiasInhabiles)
+        {
+            try
+            {
+                return new BTLDias().UpdateCatDiasInhabiles(catDiasInhabiles);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+
+        #region Motivos
+        [HttpPost]
+        public List<EcatmotivoDiasInhabiles> GetMotivoDiasInhabil()
+        {
+            try
+            {
+                return new BTLDias().GetMotivoDiasInhabil();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
+        [HttpPost]
+        public Resultado SetMotivoDiasInhabil(EcatmotivoDiasInhabiles diasInhabiles)
+        {
+            try
+            {
+                return new BTLDias().SetMotivoDiasInhabil(diasInhabiles);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
+        [HttpPost]
+        public Resultado UpdateMotivoDiasInhabil(EcatmotivoDiasInhabiles diasInhabiles)
+        {
+            try
+            {
+                return new BTLDias().UpdateMotivoDiasInhabil(diasInhabiles);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }        
+        #endregion
     }
 }

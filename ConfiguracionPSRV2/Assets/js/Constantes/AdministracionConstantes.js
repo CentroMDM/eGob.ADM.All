@@ -6,7 +6,7 @@ const URLAPIBase = "https://localhost:44391/api/";//API LOCAL
 
 
 const URLAPIAcceso = URLAPIBase + "Acceso/";
-const CFG = URLAPIBase + "Implementacion/"; 
+const CFG = URLAPIBase + "Configuracion/"; 
 const EO = URLAPIBase + "EstructuraOrganizacional/"; 
 
 // #region //////////////// ~~~~~~~~~~~~~~~~~~~~~~ NUEVA DLL ~~~~~~~~~~~~~~~~~~~~~~ ////////////////
@@ -356,14 +356,14 @@ Administracion.Auditoria = {
 
 //Configuración
     //Días Inhabiles
-const GetMotivoDiasInhabil = subdirectorio + "/Dias/GetMotivoDiasInhabil";
-const SetMotivoDiasInhabil = subdirectorio + "/Dias/SetMotivoDiasInhabil";
-const UpdateMotivoDiasInhabil = subdirectorio + "/Dias/UpdateMotivoDiasInhabil";
-const GetCatDiasInhabiles = subdirectorio + "/Dias/GetCatDiasInhabiles";
-const SetCatDiasInhabiles = subdirectorio + "/Dias/SetCatDiasInhabiles";
-const UpdateCatDiasInhabiles = subdirectorio + "/Dias/UpdateCatDiasInhabiles";
-const DeleteCatDiasInhabiles = subdirectorio + "/Dias/DeleteCatDiasInhabiles";
-const GetDescriptivoItems = subdirectorio + "/Dias/GetDescriptivoItems";
+const GetMotivoDiasInhabil = CFG + "GetMotivoDiasInhabil";
+const SetMotivoDiasInhabil = CFG + "SetMotivoDiasInhabil";
+const UpdateMotivoDiasInhabil = CFG + "UpdateMotivoDiasInhabil";
+const GetCatDiasInhabiles = CFG + "GetCatDiasInhabiles";
+const SetCatDiasInhabiles = CFG + "SetCatDiasInhabiles";
+const UpdateCatDiasInhabiles = CFG + "UpdateCatDiasInhabiles";
+const DeleteCatDiasInhabiles = CFG + "DeleteCatDiasInhabiles";
+const GetDescriptivoItems = CFG + "GetDescriptivoItems";
 
 
 

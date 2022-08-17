@@ -88,9 +88,39 @@ namespace BTLConfiguracionPSRV2
         public Resultado UpdateCatDiasInhabiles(EcatdiasInhabiles catDiasInhabiles)
         {
             DAOUpdateorDeleteObjetosNegocio updateDefinicion = new DAOUpdateorDeleteObjetosNegocio();
-            DataTable table = updateDefinicion.UpdateOrDeleteRegistro(ScriptDias.UpdateCatDiasInhabiles(catDiasInhabiles));
-            Resultado resultado = UtilTablas.ResultadoDesdeTabla(table);
-            return resultado;
+            DAOSetObjetosNegocio setIngresar = new DAOSetObjetosNegocio();
+            if (catDiasInhabiles.FechaDiaInhabil == catDiasInhabiles.FechaDiaInhabilFinal)
+            {
+                DataTable table = updateDefinicion.UpdateOrDeleteRegistro(ScriptDias.UpdateCatDiasInhabiles(catDiasInhabiles));
+                Resultado resultado = UtilTablas.ResultadoDesdeTabla(table);     
+                return resultado;
+            }
+            else
+            {
+                Resultado resultado = new Resultado();
+                catDiasInhabiles.FechaDiaInhabil = catDiasInhabiles.FechaDiaInhabil.AddDays(1);
+                while (catDiasInhabiles.FechaDiaInhabil <= catDiasInhabiles.FechaDiaInhabilFinal)
+                {
+                    if (!((catDiasInhabiles.FechaDiaInhabil.DayOfWeek == System.DayOfWeek.Saturday) ||
+                            (catDiasInhabiles.FechaDiaInhabil.DayOfWeek == System.DayOfWeek.Sunday)))
+                    {
+                        (int, string) RIDDefinicion = setIngresar.ObtenerIdentificadoresPSR(TablasAdministracion.CAT_DIASINHABILES);
+                        catDiasInhabiles.RIDDiasInhabiles = RIDDefinicion.Item1;
+
+
+                        DataTable table = setIngresar.InsertarRegistro(ScriptDias.SetCatDiasInhabiles(catDiasInhabiles));
+                        resultado = UtilTablas.ResultadoDesdeTabla(table);
+                    }
+                    else
+                    {
+                        resultado.Mensaje = "Sabados y domingos";
+                        resultado.DetalleErrorSql = "no fueron registrados";
+                    }
+                    catDiasInhabiles.FechaDiaInhabil = catDiasInhabiles.FechaDiaInhabil.AddDays(1);
+                }
+
+                return resultado;
+            }            
         }
 
         public Resultado DeleteCatDiasInhabiles(EcatdiasInhabiles catDiasInhabiles)

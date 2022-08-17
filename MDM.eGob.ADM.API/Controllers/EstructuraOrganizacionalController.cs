@@ -248,9 +248,6 @@ namespace MDM.eGob.ADM.API.Controllers
             try
             {
                 var file = HttpContext.Current.Request.Files.Count > 0 ? HttpContext.Current.Request.Files[0] : null;
-                //var constructorInfo = typeof(HttpPostedFile).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0];
-                //HttpPostedFile obj = (HttpPostedFile)constructorInfo
-                //          .Invoke(new object[] { file.FileName, file.ContentType, file.InputStream });
                 if (file != null && (file.ContentType == "image/png" || file.ContentType == "image/svg+xml"))
                 {
                     return new Empleados().CargarImagenEmpleados(file);

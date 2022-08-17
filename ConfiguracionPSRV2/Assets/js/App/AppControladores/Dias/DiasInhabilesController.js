@@ -1,22 +1,9 @@
 ﻿diasInhabiles.controller("crtlDiasInhabiles", ["$scope", "$timeout", "$window", "administracionServices", "$http",
-//diasInhabiles.controller("crtlDiasInhabiles", ["$scope", "$timeout", "$window", "administracionServices", "$http", "$rootScope",
 
     function (vm = $scope, $timeout, $window, administracionServices, $http,) {
-    //function (vm = $scope, $timeout, $window, administracionServices, $http, vg = $rootScope) {
 
         const rutas = Administracion["DiasInhabiles"];
-        
-
-        //console.log("Conf_ - Dias");
-        //console.log(
-        //    JSON.parse(localStorage.getItem("Conf_"))
-        //);
-        //vg.MenuIzq = JSON.parse(localStorage.getItem("Conf_.Menu"));
-
-
-
-
-        vm.MotivoDiaInhabil = {};
+      vm.MotivoDiaInhabil = {};
         vm.EntidadFederativa = {};
         vm.MotivoDiasInhabiles = {};
         vm.CatDiasInhabiles = {};
@@ -28,38 +15,43 @@
 
 
         this.$onInit = () => {
-            vm.lstAplicafor = administracionServices.GetConsultaAdministracion(rutas.GetDescriptivoItems);
+            vm.lstAplicafor = administracionServices.MetodPOST(rutas.GetDescriptivoItems);
 
-            vm.tablaDiasInhabiles = administracionServices.GetConsultaAdministracion(rutas.GetCatDiasInhabiles);
-            vm.implementacion = administracionServices.GetConsultaAdministracion(rutas.GetImplementacion);
+            vm.tablaDiasInhabiles = administracionServices.MetodPOST(rutas.GetCatDiasInhabiles);
+            vm.implementacion = administracionServices.MetodPOST(rutas.GetImplementacion);
             vm.IniciarCatalogos();
             for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
-                var FInicio = new Date(parseInt(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", "")),);
-                vm.tablaDiasInhabiles[i].FechaDiaInhabil = FInicio.getDate() + "/" + (FInicio.getMonth() + 1) + "/" + FInicio.getFullYear();
-                //var day = FInicio.getDate();var month = FInicio.getMonth() + 1;var year = FInicio.getFullYear();
-                //vm.tablaDiasInhabiles[i].FechaDiaInhabil = day + "/" + month + "/" + year;
+                var FInicio = vm.tablaDiasInhabiles[i].FechaDiaInhabil.slice(0, 10);
+                var dateParts = FInicio.split("-");
+                vm.tablaDiasInhabiles[i].FechaDiaInhabil = dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0];
             }     
         }
-
+        vm.changeFecha = () => {
+            if (vm.btnGuardar == false && vm.btnActualizar == true) {
+                vm.CatDiasInhabiles.FechaDiaInhabilFinal = vm.CatDiasInhabiles.FechaDiaInhabil;
+            }
+        }
         vm.ValidarTarea = (objetoNegocio, tarea) => {
             if (tarea == 'Actualizar') {
                 vm.btnGuardar = false;
                 vm.btnActualizar = true;
                 vm.btnEliminar = true;
                 vm.CatDiasInhabiles = objetoNegocio;
+                vm.CatDiasInhabiles.FechaDiaInhabilCopy = JSON.parse(JSON.stringify(vm.CatDiasInhabiles.FechaDiaInhabil));
+                vm.CatDiasInhabiles.FechaDiaInhabilFinal = vm.CatDiasInhabiles.FechaDiaInhabil;
                 //vm.CatDiasInhabiles.FechaDiaInhabil = fromDateToString(new Date(parseInt(vm.CatDiasInhabiles.FechaDiaInhabil.replace("/Date(", "").replace(")/", ""), 10)));
                 //vm.CatDiasInhabiles.FechaDiaInhabil = fromDateToString(new Date(parseInt(vm.CatDiasInhabiles.FechaDiaInhabil.replace("/Date(", "").replace(")/", ""), 10)));
-                vm.CatDiasInhabiles.FechaDiaInhabilFinal = angular.copy(vm.CatDiasInhabiles.FechaDiaInhabil);
 
-                //Llenamos la seleccion
+                //vm.CatDiasInhabiles.FechaDiaInhabilFinal = angular.copy(vm.CatDiasInhabiles.FechaDiaInhabil);
+
                 vm.EntidadFederativa = vm.EntidadesFederativas.find(item => {
                     return item.RIDEntidad === vm.CatDiasInhabiles.ClaveEntidadFederativa;
                 });
                 vm.setEntidadFederativa(vm.EntidadFederativa);
                 
-                vm.Municipio = vm.Municipios.find(item => {
-                    return item.RIDMunicipio === vm.CatDiasInhabiles.ClaveMunicipio;
-                });
+                //vm.Municipio = vm.Municipios.find(item => {
+                //    return item.RIDMunicipio === vm.CatDiasInhabiles.ClaveMunicipio;
+                //});
                 //B
                 vm.MotivoDiasInhabiles = vm.tablaMotivosDiasInhabiles.find(item => {
                     return item.RIDMotivoDias === vm.CatDiasInhabiles.ClaveMotivoDiasInhabiles;
@@ -75,7 +67,7 @@
             vm.CatDiasInhabiles = {};
             vm.MotivoDiasInhabiles = {};
             vm.Municipio = {};
-            vm.WFDefinicion = {}; //Dejamos la Definicion para poder guardar los procesos y etapas
+            vm.WFDefinicion = {};
             vm.CatDiasInhabiles = {};
             vm.MotivoDiasInhabiles = {};
             vm.Aplica = {};
@@ -105,7 +97,7 @@
 
         vm.IniciarCatalogos = () => {
             vm.GetMotivoDiasInhabiles();
-            vm.EntidadesFederativas = administracionServices.GetConsultaAdministracion(rutas.GetImpEntidadesFederativas);
+            vm.EntidadesFederativas = administracionServices.MetodPOST(rutas.GetImpEntidadesFederativas);
             vm.EntidadFederativa = vm.EntidadesFederativas.find(item => {
                 return item.RIDEntidad === vm.implementacion.Estado;
             });
@@ -113,7 +105,7 @@
         }
         vm.setEntidadFederativa = (EntidadFederativa) => {
             vm.EntidadFederativa = EntidadFederativa;
-            vm.Municipios = administracionServices.GetConsultaAdministracionConParametro(rutas.GetImpMunicipios, vm.EntidadFederativa);
+            vm.Municipios = administracionServices.MetodPOST(rutas.GetImpMunicipios, vm.EntidadFederativa);
         }
         vm.setMunicipio = (Municipio) => {
             vm.Municipio = Municipio;
@@ -121,15 +113,32 @@
         vm.setMotivoDiasInhabiles = (MotivoDiasInhabiles) => {
             vm.MotivoDiasInhabiles = MotivoDiasInhabiles;
         }
+        vm.FormatoFecha = function (fecha) {
+            //var date = new Date(fecha);
+            var dateParts = fecha.split("/");
+            var date = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]); 
+            var day = date.getDate();       // yields date
+            var month = date.getMonth() + 1;    // yields month (add one as '.getMonth()' is zero indexed)
+            var year = date.getFullYear();  // yields year
+            var hour = date.getHours();     // yields hours 
+            var minute = date.getMinutes(); // yields minutes
+            var second = date.getSeconds(); // yields seconds
 
+            // After this construct a string with the above results as below
+            var time = month + "/" + day + "/" + year + " " + hour + ':' + minute + ':' + second;
+            return time;
+            //return DateTime.ParseExact(time, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+        }
         vm.ValidarAccion = () => {
             vm.CatDiasInhabiles.ClaveMotivoDiasInhabiles = vm.MotivoDiasInhabiles.RIDMotivoDias;
             vm.CatDiasInhabiles.ClaveEntidadFederativa = vm.EntidadFederativa.RIDEntidad;
-            vm.CatDiasInhabiles.ClaveMunicipio = vm.Municipio.RIDMunicipio;
-            if (compareDates(vm.CatDiasInhabiles.FechaDiaInhabil, vm.CatDiasInhabiles.FechaDiaInhabilFinal)) {
-                MensajeGeneral("La fecha final no puede ser menor a la fecha inicial", "info");
-                return;
+            //vm.CatDiasInhabiles.ClaveMunicipio = vm.Municipio.RIDMunicipio;
+            if (vm.CatDiasInhabiles.FechaDiaInhabilCopy!=undefined) {
+                vm.CatDiasInhabiles.FechaDiaInhabil = vm.CatDiasInhabiles.FechaDiaInhabilCopy;                
             }
+            if (compareDates(vm.CatDiasInhabiles.FechaDiaInhabil, vm.CatDiasInhabiles.FechaDiaInhabilFinal)) {
+                return MensajeGeneral("La fecha final no puede ser menor a la fecha inicial", "info");
+            }            
             if (vm.btnGuardar) {
                 vm.listaNoValidos = vm.Validaciones();
                 if (vm.listaNoValidos.length > 0) {
@@ -153,19 +162,15 @@
                     confirmButtonText: "Si"
                 }).then(function (seleccion) {
                     if (seleccion.value) {
-                        var result = administracionServices.EliminarObjetoNegocio(rutas.DeleteCatDiasInhabiles, vm.CatDiasInhabiles);
+                        var result = administracionServices.MetodPOST(rutas.DeleteCatDiasInhabiles, vm.CatDiasInhabiles);
                         $('.tablaPSRPrincipal').DataTable().clear().destroy();
                         if (!result.ExisteError) {
+                            vm.tablaDiasInhabiles = administracionServices.MetodPOST(rutas.GetCatDiasInhabiles);
+                            for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
+                                var FInicio = new Date(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", ""),);
+                                vm.tablaDiasInhabiles[i].FechaDiaInhabil = FInicio.getDate() + "/" + (FInicio.getMonth() + 1) + "/" + FInicio.getFullYear();
+                            }
                             MensajeRegresoServidor(result, "success");
-                            $timeout(function () {
-                                vm.tablaDiasInhabiles = administracionServices.GetConsultaAdministracion(rutas.GetCatDiasInhabiles);
-                                for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
-                                    var FInicio = new Date(parseInt(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", "")),);
-                                    vm.tablaDiasInhabiles[i].FechaDiaInhabil = FInicio.getDate() + "/" + (FInicio.getMonth() + 1) + "/" + FInicio.getFullYear();
-                                }
-                                vm.ReshapeTable('dt-resumen');
-                                MostrarFormularios();
-                            })
                         } else {
                             MensajeRegresoServidor(result, "error");
                         }
@@ -178,8 +183,7 @@
             vm.fechasInvalidas = [];
             while (vm.fecInicial <= vm.fecFinal) {
                 for (let i = 0; i < vm.tablaDiasInhabiles.length; i++) {
-                    vm.validate = new Date(parseInt(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", ""), 10));
-                    //vm.validate = new Date(parseInt(vm.tablaDiasInhabiles[i].FechaInicioDiaInhabil.replace("/Date(", "").replace(")/", ""), 10));
+                    vm.validate = new Date(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", ""), 10);
                     if (vm.fecInicial.getTime() === vm.validate.getTime()) {
                         vm.fechasInvalidas.push(fromDateToString(vm.fecInicial));
                         break;
@@ -189,6 +193,7 @@
             }
             return vm.fechasInvalidas;
         }
+        
         vm.GuardarObjetoDiaInhabil = () => {
             Swal.fire(
                 {
@@ -199,30 +204,23 @@
                     cancelButtonText: 'No',
                     confirmButtonText: "Si"
                 }).then(function (seleccion) {
-                    if (seleccion.value) {
-                        var result = administracionServices.IngresarObjetoNegocio(rutas.SetCatDiasInhabiles, vm.CatDiasInhabiles);
+                    if (seleccion.value) {       
+                        vm.CatDiasInhabiles.FechaDiaInhabil = vm.FormatoFecha(vm.CatDiasInhabiles.FechaDiaInhabil);
+                        vm.CatDiasInhabiles.FechaDiaInhabilFinal = vm.FormatoFecha(vm.CatDiasInhabiles.FechaDiaInhabilFinal);
+                        var result = administracionServices.MetodPOST(rutas.SetCatDiasInhabiles, vm.CatDiasInhabiles);
                         $('.tablaPSRPrincipal').DataTable().clear().destroy();
                         if (!result.ExisteError) {
+                            vm.WFDefinicion = {};
+                            vm.CatDiasInhabiles = {};
+                            vm.MotivoDiasInhabiles = {};
+                            vm.Municipio = {};
+                            vm.Aplica = {};
+                            vm.tablaDiasInhabiles = administracionServices.MetodPOST(rutas.GetCatDiasInhabiles);
+                            for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
+                                var FInicio = new Date(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", ""),);
+                                vm.tablaDiasInhabiles[i].FechaDiaInhabil = FInicio.getDate() + "/" + (FInicio.getMonth() + 1) + "/" + FInicio.getFullYear();
+                            }
                             MensajeRegresoServidor(result, "success");
-                            $timeout(function () {
-                                vm.WFDefinicion = {}; //Dejamos la Definicion para poder guardar los procesos y etapas
-                                vm.CatDiasInhabiles = {};
-                                vm.MotivoDiasInhabiles = {};
-                                //vm.EntidadFederativa = {};
-                                vm.Municipio = {};
-                                vm.Aplica = {};
-
-                                //vm.CleaForm();
-                                //vm.ReloadTable();
-                                //vm.mdmForm.$setPristine();
-                                vm.tablaDiasInhabiles = administracionServices.GetConsultaAdministracion(rutas.GetCatDiasInhabiles);
-                                for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
-                                    var FInicio = new Date(parseInt(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", "")),);
-                                    vm.tablaDiasInhabiles[i].FechaDiaInhabil = FInicio.getDate() + "/" + (FInicio.getMonth() + 1) + "/" + FInicio.getFullYear();
-                                }
-                                vm.ReshapeTable('dt-resumen');
-                                MostrarFormularios();
-                            })
                         }
                         else {
                             MensajeRegresoServidor(result, "error");
@@ -242,35 +240,29 @@
                     confirmButtonText: "Si"
                 }).then(function (seleccion) {
                     if (seleccion.value) {
-                        vm.CatDiasInhabiles.FechaDiaInhabilFinal = vm.CatDiasInhabiles.FechaDiaInhabil;
-                        var result = administracionServices.ActualizarObjetoNegocio(rutas.UpdateCatDiasInhabiles, vm.CatDiasInhabiles);
+                        //vm.CatDiasInhabiles.FechaDiaInhabilFinal = vm.CatDiasInhabiles.FechaDiaInhabil;
+                        vm.CatDiasInhabiles.FechaDiaInhabil = vm.FormatoFecha(vm.CatDiasInhabiles.FechaDiaInhabil);
+                        vm.CatDiasInhabiles.FechaDiaInhabilFinal = vm.FormatoFecha(vm.CatDiasInhabiles.FechaDiaInhabilFinal);
+                        var result = administracionServices.MetodPOST(rutas.UpdateCatDiasInhabiles, vm.CatDiasInhabiles);
                         if (!result.ExisteError) {
+                            vm.CatDiasInhabiles = {};
+                            vm.tablaDiasInhabiles = administracionServices.MetodPOST(rutas.GetCatDiasInhabiles);
+                            for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
+                                var FInicio = new Date(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", ""),);
+                                vm.tablaDiasInhabiles[i].FechaDiaInhabil = FInicio.getDate() + "/" + (FInicio.getMonth() + 1) + "/" + FInicio.getFullYear();
+                            }
                             MensajeRegresoServidor(result, "success");
-                            $timeout(function () {
-                                //vm.tablaDefinicion = administracionServices.GetConsultaAdministracion(rutas.GetWorkFlowDefinicion);
-                                vm.CatDiasInhabiles = {};
-                                vm.tablaDiasInhabiles = administracionServices.GetConsultaAdministracion(rutas.GetCatDiasInhabiles);
-                                for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
-                                    var FInicio = new Date(parseInt(vm.tablaDiasInhabiles[i].FechaDiaInhabil.replace("/Date(", "").replace(")/", "")),);
-                                    vm.tablaDiasInhabiles[i].FechaDiaInhabil = FInicio.getDate() + "/" + (FInicio.getMonth() + 1) + "/" + FInicio.getFullYear();
-                                }
-                                vm.ReshapeTable('dt-resumen');
-                                
-                            })
-                            MostrarFormularios();
                         } else {
                             MensajeRegresoServidor(result, "error");
                         }
                     }
-                });
+                }
+            );
         };
-
-        //Motivos
         vm.GetMotivoDiasInhabiles = () => {
-            vm.tablaMotivosDiasInhabiles = administracionServices.GetConsultaAdministracion(rutas.GetMotivoDiasInhabil);
+            vm.tablaMotivosDiasInhabiles = administracionServices.MetodPOST(rutas.GetMotivoDiasInhabil);
         }
         vm.ValidarMotivoDiaInhabil = (objetoMotivo) => {
-            //vm.MotivoDiaInhabil = objetoMotivo;
             var eliminaMotivo = objetoMotivo;
 
             for (var i = 0; i < vm.tablaDiasInhabiles.length; i++) {
@@ -288,7 +280,6 @@
                     vm.MotivoDiaInhabil.Motivo = '';
                     return false
                 } else {
-                    //validamos que no existe un motivo similar
                     let aux = vm.tablaMotivosDiasInhabiles.find(function (item) {
                         return item.Motivo === vm.MotivoDiaInhabil.Motivo;
                     })
@@ -328,17 +319,15 @@
                     confirmButtonText: "Si"
                 }).then(seleccion =>  {
                     if (seleccion.value) {
-                        var result = administracionServices.IngresarObjetoNegocio(rutas.SetMotivoDiasInhabil, vm.MotivoDiaInhabil);
+                        var result = administracionServices.MetodPOST(rutas.SetMotivoDiasInhabil, vm.MotivoDiaInhabil);
                         if (!result.ExisteError) {
-                            MensajeRegresoServidor(result, "success");
-                            $timeout(() => {
-                                //vm.WFDefinicion = {}; Dejamos la Definicion para poder guardar los procesos y etapas
-                                vm.GetMotivoDiasInhabiles();
-                                vm.MotivoDiaInhabil.Motivo = '';
-                                vm.mdmForm.$setPristine();
-                            })
+                            vm.GetMotivoDiasInhabiles();
+                            vm.MotivoDiaInhabil.Motivo = '';
+                            Swal.fire('', 'La información se almacenó correctamente', 'success'); 
+                            //MensajeRegresoServidor(result, "success");
                         } else {
-                            MensajeRegresoServidor(result, "error");
+                            Swal.fire('', 'No se ha podido actualizar la información', 'error');
+                            //MensajeRegresoServidor(result, "error");
                         }
                     }
                 });
@@ -354,20 +343,14 @@
                     confirmButtonText: "Si"
                 }).then(seleccion => {
                     if (seleccion.value) {
-                        var result = administracionServices.ActualizarObjetoNegocio(rutas.UpdateMotivoDiasInhabil, eliminaMotivo);
+                        var result = administracionServices.MetodPOST(rutas.UpdateMotivoDiasInhabil, eliminaMotivo);
                         if (!result.ExisteError) {
-                            MensajeRegresoServidor(result, "success");
-
-                            $timeout(() => {
-                                //vm.tablaDefinicion = administracionServices.GetConsultaAdministracion(rutas.GetWorkFlowDefinicion);
-                                vm.GetMotivoDiasInhabiles();
-                                vm.ReshapeTable('TbMotivos');
-                                //vm.MotivoDiaInhabil = {};
-                                //$('#frmMotivosCambios').modal('hide');
-
-                            })
+                            vm.GetMotivoDiasInhabiles();
+                            //MensajeRegresoServidor(result, "success");
+                            Swal.fire('', 'La información se almacenó correctamente', 'success'); 
                         } else {
-                            MensajeRegresoServidor(result, "error");
+                            //MensajeRegresoServidor(result, "error");
+                            Swal.fire('', 'No se ha podido actualizar la información', 'error');
                         }
                     }
                 }
@@ -377,56 +360,8 @@
         vm.ReshapeTable = (name) => {
             $timeout(() => { reloadTableWithName(name); });
         }
-
-
-
         //Aplica Para
         vm.setAplica = function (Aplica) {
             vm.CatDiasInhabiles.ClaveAplicaPara = Aplica.RIDItemCatalogo;
         }
-
-        //vm.ReloadTable = () => {
-        //    $timeout(() => {
-        //        $('.tablaPSRPrincipal').DataTable(
-        //            {
-        //                responsive: true,
-        //                lengthChange: false,
-        //                language: {
-        //                    search: '<div class=" d-inline-flex width-5 align-items-center justify-content-center border-bottom-right-radius-0 border-top-right-radius-0 border-right-0"><i class="fal fa-search"></i></div>',
-        //                    searchPlaceholder: "Buscar",
-        //                    zeroRecords: " ",
-        //                    paginate: {
-        //                        "first": "Primero",
-        //                        "last": "Ultimo",
-        //                        "next": "Siguiente",
-        //                        "previous": "Previo"
-        //                    },
-        //                    info: "Mostrando _START_ de _END_ de _TOTAL_ registros",
-        //                    infoEmpty: "Sin registros"
-        //                },
-        //                "columnDefs": [
-        //                    { "className": "dt-center", "targets": "_all" }
-        //                ],
-        //                dom:
-        //                    "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-        //                    "<'row'<'col-sm-12'tr>>" +
-        //                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        //                buttons: [
-        //                    {
-        //                        extend: 'excelHtml5',
-        //                        text: 'Excel',
-        //                        titleAttr: 'Generate Excel',
-        //                        className: 'btn btn-info btn-sm mr-1'
-        //                    },
-        //                    {
-        //                        extend: 'csvHtml5',
-        //                        text: 'CSV',
-        //                        titleAttr: 'Generate CSV',
-        //                        className: 'btn btn-info btn-sm mr-1'
-        //                    }
-        //                ]
-        //            });
-        //    }, 0);
-        //}
-
     }])
